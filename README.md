@@ -1,11 +1,16 @@
-<p align="center" >
-  <img src="https://raw.github.com/AFNetworking/AFNetworking/assets/afnetworking-logo.png" alt="AFNetworking" title="AFNetworking">
-</p>
-
 [![Build Status](https://travis-ci.org/AFNetworking/AFNetworking.png?branch=master)](https://travis-ci.org/AFNetworking/AFNetworking)
 
-AFNetworking is a delightful networking library for iOS and Mac OS X. It's built on top of [NSURLConnection](http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSURLConnection_Class/Reference/Reference.html), [NSOperation](http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/NSOperation_class/Reference/Reference.html), and other familiar Foundation technologies. It has a modular architecture with well-designed, feature-rich APIs that are a joy to use. For example, here's how easy it is to get JSON from a URL:
+With a couple of lines of code you can create a PDF view controller. This framework is very fast and easy to use.
 
+
+![Mind Blown](https://raw.github.com/videlalvaro/gifsockets/master/doc/mybrain.gif)
+
+Sample usage
+
+Add RoboReader files to your project; import "RoboViewController.h"
+
+Create a RoboDocument instance for the PDF file you want to display. NSString *path = [[NSBundle mainBundle] PathForResource:@"YourPdf" withExtension:@"pdf"]; RoboDocument *document = [[RoboDocument alloc] initWithFilePath:url password:@"YourPdfPassword_or_nil"]
+Create a RoboViewController instance and present it as a child view controller. RoboViewController *r = [[RoboViewController alloc] initWithDocument:document];
 
 
 ## Credits
