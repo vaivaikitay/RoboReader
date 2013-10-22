@@ -1,0 +1,554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		044B432A17034644002ADE90 /* icon_29.png in Resources */ = {isa = PBXBuildFile; fileRef = 044B432417034644002ADE90 /* icon_29.png */; };
+		044B432B17034644002ADE90 /* icon_50.png in Resources */ = {isa = PBXBuildFile; fileRef = 044B432517034644002ADE90 /* icon_50.png */; };
+		044B432C17034644002ADE90 /* icon_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 044B432617034644002ADE90 /* icon_72.png */; };
+		044B432D17034644002ADE90 /* icon_144.png in Resources */ = {isa = PBXBuildFile; fileRef = 044B432717034644002ADE90 /* icon_144.png */; };
+		044B432E17034644002ADE90 /* icon_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 044B432817034644002ADE90 /* icon_512.png */; };
+		044B432F17034644002ADE90 /* icon_1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 044B432917034644002ADE90 /* icon_1024.png */; };
+		04B304561609C0E60000CDDA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B304531609C0E60000CDDA /* main.m */; };
+		04C55FA4173A7295007791DE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 04C55FA3173A7295007791DE /* README.md */; };
+		04CBD3C317396D1200A5E440 /* CGPDFDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD39A17396D1200A5E440 /* CGPDFDocument.m */; };
+		04CBD3C417396D1200A5E440 /* PDFPageConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD39C17396D1200A5E440 /* PDFPageConverter.m */; };
+		04CBD3C517396D1200A5E440 /* PDFPageRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD39E17396D1200A5E440 /* PDFPageRenderer.m */; };
+		04CBD3C617396D1200A5E440 /* RoboConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD3A017396D1200A5E440 /* RoboConstants.m */; };
+		04CBD3C717396D1200A5E440 /* RoboContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD3A217396D1200A5E440 /* RoboContentView.m */; };
+		04CBD3C817396D1200A5E440 /* RoboDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD3A417396D1200A5E440 /* RoboDocument.m */; };
+		04CBD3C917396D1200A5E440 /* RoboMainPagebar.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD3A617396D1200A5E440 /* RoboMainPagebar.m */; };
+		04CBD3CA17396D1200A5E440 /* RoboMainToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD3A817396D1200A5E440 /* RoboMainToolbar.m */; };
+		04CBD3CB17396D1200A5E440 /* RoboPDFController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD3AA17396D1200A5E440 /* RoboPDFController.m */; };
+		04CBD3CC17396D1200A5E440 /* RoboPDFModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD3AC17396D1200A5E440 /* RoboPDFModel.m */; };
+		04CBD3CD17396D1200A5E440 /* RoboViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBD3AF17396D1200A5E440 /* RoboViewController.m */; };
+		04CBD3CE17396D1200A5E440 /* back_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B117396D1200A5E440 /* back_button.png */; };
+		04CBD3CF17396D1200A5E440 /* back_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B217396D1200A5E440 /* back_button@2x.png */; };
+		04CBD3D017396D1200A5E440 /* nav_bar_plashka.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B317396D1200A5E440 /* nav_bar_plashka.png */; };
+		04CBD3D117396D1200A5E440 /* nav_bar_plashka@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B417396D1200A5E440 /* nav_bar_plashka@2x.png */; };
+		04CBD3D217396D1200A5E440 /* page-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B517396D1200A5E440 /* page-bg.png */; };
+		04CBD3D317396D1200A5E440 /* page-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B617396D1200A5E440 /* page-bg@2x.png */; };
+		04CBD3D417396D1200A5E440 /* page_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B717396D1200A5E440 /* page_left.png */; };
+		04CBD3D517396D1200A5E440 /* page_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B817396D1200A5E440 /* page_left@2x.png */; };
+		04CBD3D617396D1200A5E440 /* page_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3B917396D1200A5E440 /* page_right.png */; };
+		04CBD3D717396D1200A5E440 /* page_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3BA17396D1200A5E440 /* page_right@2x.png */; };
+		04CBD3D817396D1200A5E440 /* progress_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3BB17396D1200A5E440 /* progress_bar.png */; };
+		04CBD3D917396D1200A5E440 /* progress_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3BC17396D1200A5E440 /* progress_bar@2x.png */; };
+		04CBD3DA17396D1200A5E440 /* Stroke2px.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3BD17396D1200A5E440 /* Stroke2px.png */; };
+		04CBD3DB17396D1200A5E440 /* Stroke2px@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3BE17396D1200A5E440 /* Stroke2px@2x.png */; };
+		04CBD3DC17396D1200A5E440 /* Stroke2px_single.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3BF17396D1200A5E440 /* Stroke2px_single.png */; };
+		04CBD3DD17396D1200A5E440 /* Stroke2px_single@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3C017396D1200A5E440 /* Stroke2px_single@2x.png */; };
+		04CBD3DE17396D1200A5E440 /* X.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3C117396D1200A5E440 /* X.png */; };
+		04CBD3DF17396D1200A5E440 /* X@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CBD3C217396D1200A5E440 /* X@2x.png */; };
+		04EB51F7170AF91A0095CA89 /* f5_newspaper.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 04EB51F6170AF9190095CA89 /* f5_newspaper.pdf */; };
+		04F138C41701AEC00051C0E0 /* RoboAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F138BF1701AEC00051C0E0 /* RoboAppDelegate.m */; };
+		04F138C61701AEC00051C0E0 /* RoboDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F138C31701AEC00051C0E0 /* RoboDemoController.m */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		450A670411D27B9D00014BF5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 450A670311D27B9D00014BF5 /* QuartzCore.framework */; };
+		458DDFD7140D45FA00C5DA94 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 458DDFD6140D45FA00C5DA94 /* ImageIO.framework */; };
+		45BD5AFE13AE721A00D6FE97 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BD5AFD13AE721A00D6FE97 /* MessageUI.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		044B432417034644002ADE90 /* icon_29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_29.png; path = Graphics/icon_29.png; sourceTree = "<group>"; };
+		044B432517034644002ADE90 /* icon_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_50.png; path = Graphics/icon_50.png; sourceTree = "<group>"; };
+		044B432617034644002ADE90 /* icon_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_72.png; path = Graphics/icon_72.png; sourceTree = "<group>"; };
+		044B432717034644002ADE90 /* icon_144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_144.png; path = Graphics/icon_144.png; sourceTree = "<group>"; };
+		044B432817034644002ADE90 /* icon_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_512.png; path = Graphics/icon_512.png; sourceTree = "<group>"; };
+		044B432917034644002ADE90 /* icon_1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_1024.png; path = Graphics/icon_1024.png; sourceTree = "<group>"; };
+		04B304511609C0E60000CDDA /* RoboReader-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "RoboReader-Info.plist"; path = "Resources/RoboReader-Info.plist"; sourceTree = "<group>"; };
+		04B304521609C0E60000CDDA /* RoboReader-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RoboReader-Prefix.pch"; path = "Resources/RoboReader-Prefix.pch"; sourceTree = "<group>"; };
+		04B304531609C0E60000CDDA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Resources/main.m; sourceTree = "<group>"; };
+		04C55FA3173A7295007791DE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		04CBD39917396D1200A5E440 /* CGPDFDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGPDFDocument.h; sourceTree = "<group>"; };
+		04CBD39A17396D1200A5E440 /* CGPDFDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGPDFDocument.m; sourceTree = "<group>"; };
+		04CBD39B17396D1200A5E440 /* PDFPageConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFPageConverter.h; sourceTree = "<group>"; };
+		04CBD39C17396D1200A5E440 /* PDFPageConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFPageConverter.m; sourceTree = "<group>"; };
+		04CBD39D17396D1200A5E440 /* PDFPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFPageRenderer.h; sourceTree = "<group>"; };
+		04CBD39E17396D1200A5E440 /* PDFPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFPageRenderer.m; sourceTree = "<group>"; };
+		04CBD39F17396D1200A5E440 /* RoboConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboConstants.h; sourceTree = "<group>"; };
+		04CBD3A017396D1200A5E440 /* RoboConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboConstants.m; sourceTree = "<group>"; };
+		04CBD3A117396D1200A5E440 /* RoboContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboContentView.h; sourceTree = "<group>"; };
+		04CBD3A217396D1200A5E440 /* RoboContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboContentView.m; sourceTree = "<group>"; };
+		04CBD3A317396D1200A5E440 /* RoboDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboDocument.h; sourceTree = "<group>"; };
+		04CBD3A417396D1200A5E440 /* RoboDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboDocument.m; sourceTree = "<group>"; };
+		04CBD3A517396D1200A5E440 /* RoboMainPagebar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboMainPagebar.h; sourceTree = "<group>"; };
+		04CBD3A617396D1200A5E440 /* RoboMainPagebar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboMainPagebar.m; sourceTree = "<group>"; };
+		04CBD3A717396D1200A5E440 /* RoboMainToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboMainToolbar.h; sourceTree = "<group>"; };
+		04CBD3A817396D1200A5E440 /* RoboMainToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboMainToolbar.m; sourceTree = "<group>"; };
+		04CBD3A917396D1200A5E440 /* RoboPDFController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboPDFController.h; sourceTree = "<group>"; };
+		04CBD3AA17396D1200A5E440 /* RoboPDFController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboPDFController.m; sourceTree = "<group>"; };
+		04CBD3AB17396D1200A5E440 /* RoboPDFModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboPDFModel.h; sourceTree = "<group>"; };
+		04CBD3AC17396D1200A5E440 /* RoboPDFModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboPDFModel.m; sourceTree = "<group>"; };
+		04CBD3AD17396D1200A5E440 /* RoboReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboReader.h; sourceTree = "<group>"; };
+		04CBD3AE17396D1200A5E440 /* RoboViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboViewController.h; sourceTree = "<group>"; };
+		04CBD3AF17396D1200A5E440 /* RoboViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboViewController.m; sourceTree = "<group>"; };
+		04CBD3B117396D1200A5E440 /* back_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_button.png; sourceTree = "<group>"; };
+		04CBD3B217396D1200A5E440 /* back_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_button@2x.png"; sourceTree = "<group>"; };
+		04CBD3B317396D1200A5E440 /* nav_bar_plashka.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nav_bar_plashka.png; sourceTree = "<group>"; };
+		04CBD3B417396D1200A5E440 /* nav_bar_plashka@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_bar_plashka@2x.png"; sourceTree = "<group>"; };
+		04CBD3B517396D1200A5E440 /* page-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "page-bg.png"; sourceTree = "<group>"; };
+		04CBD3B617396D1200A5E440 /* page-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "page-bg@2x.png"; sourceTree = "<group>"; };
+		04CBD3B717396D1200A5E440 /* page_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_left.png; sourceTree = "<group>"; };
+		04CBD3B817396D1200A5E440 /* page_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "page_left@2x.png"; sourceTree = "<group>"; };
+		04CBD3B917396D1200A5E440 /* page_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_right.png; sourceTree = "<group>"; };
+		04CBD3BA17396D1200A5E440 /* page_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "page_right@2x.png"; sourceTree = "<group>"; };
+		04CBD3BB17396D1200A5E440 /* progress_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = progress_bar.png; sourceTree = "<group>"; };
+		04CBD3BC17396D1200A5E440 /* progress_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "progress_bar@2x.png"; sourceTree = "<group>"; };
+		04CBD3BD17396D1200A5E440 /* Stroke2px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Stroke2px.png; sourceTree = "<group>"; };
+		04CBD3BE17396D1200A5E440 /* Stroke2px@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Stroke2px@2x.png"; sourceTree = "<group>"; };
+		04CBD3BF17396D1200A5E440 /* Stroke2px_single.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Stroke2px_single.png; sourceTree = "<group>"; };
+		04CBD3C017396D1200A5E440 /* Stroke2px_single@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Stroke2px_single@2x.png"; sourceTree = "<group>"; };
+		04CBD3C117396D1200A5E440 /* X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = X.png; sourceTree = "<group>"; };
+		04CBD3C217396D1200A5E440 /* X@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "X@2x.png"; sourceTree = "<group>"; };
+		04EB51F6170AF9190095CA89 /* f5_newspaper.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = f5_newspaper.pdf; path = Resources/f5_newspaper.pdf; sourceTree = "<group>"; };
+		04F138BE1701AEC00051C0E0 /* RoboAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboAppDelegate.h; sourceTree = "<group>"; };
+		04F138BF1701AEC00051C0E0 /* RoboAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboAppDelegate.m; sourceTree = "<group>"; };
+		04F138C21701AEC00051C0E0 /* RoboDemoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoboDemoController.h; sourceTree = "<group>"; };
+		04F138C31701AEC00051C0E0 /* RoboDemoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoboDemoController.m; sourceTree = "<group>"; };
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D6058910D05DD3D006BFB54 /* RoboReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoboReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		450A670311D27B9D00014BF5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		458DDFD6140D45FA00C5DA94 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		45BD5AFD13AE721A00D6FE97 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
+				450A670411D27B9D00014BF5 /* QuartzCore.framework in Frameworks */,
+				45BD5AFE13AE721A00D6FE97 /* MessageUI.framework in Frameworks */,
+				458DDFD7140D45FA00C5DA94 /* ImageIO.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		044B427617032473002ADE90 /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				450A66D911D27B5800014BF5 /* Graphics */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = Demo;
+			sourceTree = "<group>";
+		};
+		04CBD39717396D1200A5E440 /* RoboReader */ = {
+			isa = PBXGroup;
+			children = (
+				04CBD39817396D1200A5E440 /* Classes */,
+				04CBD3B017396D1200A5E440 /* Graphics */,
+			);
+			path = RoboReader;
+			sourceTree = "<group>";
+		};
+		04CBD39817396D1200A5E440 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				04CBD39917396D1200A5E440 /* CGPDFDocument.h */,
+				04CBD39A17396D1200A5E440 /* CGPDFDocument.m */,
+				04CBD39B17396D1200A5E440 /* PDFPageConverter.h */,
+				04CBD39C17396D1200A5E440 /* PDFPageConverter.m */,
+				04CBD39D17396D1200A5E440 /* PDFPageRenderer.h */,
+				04CBD39E17396D1200A5E440 /* PDFPageRenderer.m */,
+				04CBD39F17396D1200A5E440 /* RoboConstants.h */,
+				04CBD3A017396D1200A5E440 /* RoboConstants.m */,
+				04CBD3A117396D1200A5E440 /* RoboContentView.h */,
+				04CBD3A217396D1200A5E440 /* RoboContentView.m */,
+				04CBD3A317396D1200A5E440 /* RoboDocument.h */,
+				04CBD3A417396D1200A5E440 /* RoboDocument.m */,
+				04CBD3A517396D1200A5E440 /* RoboMainPagebar.h */,
+				04CBD3A617396D1200A5E440 /* RoboMainPagebar.m */,
+				04CBD3A717396D1200A5E440 /* RoboMainToolbar.h */,
+				04CBD3A817396D1200A5E440 /* RoboMainToolbar.m */,
+				04CBD3A917396D1200A5E440 /* RoboPDFController.h */,
+				04CBD3AA17396D1200A5E440 /* RoboPDFController.m */,
+				04CBD3AB17396D1200A5E440 /* RoboPDFModel.h */,
+				04CBD3AC17396D1200A5E440 /* RoboPDFModel.m */,
+				04CBD3AD17396D1200A5E440 /* RoboReader.h */,
+				04CBD3AE17396D1200A5E440 /* RoboViewController.h */,
+				04CBD3AF17396D1200A5E440 /* RoboViewController.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		04CBD3B017396D1200A5E440 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				04CBD3B117396D1200A5E440 /* back_button.png */,
+				04CBD3B217396D1200A5E440 /* back_button@2x.png */,
+				04CBD3B317396D1200A5E440 /* nav_bar_plashka.png */,
+				04CBD3B417396D1200A5E440 /* nav_bar_plashka@2x.png */,
+				04CBD3B517396D1200A5E440 /* page-bg.png */,
+				04CBD3B617396D1200A5E440 /* page-bg@2x.png */,
+				04CBD3B717396D1200A5E440 /* page_left.png */,
+				04CBD3B817396D1200A5E440 /* page_left@2x.png */,
+				04CBD3B917396D1200A5E440 /* page_right.png */,
+				04CBD3BA17396D1200A5E440 /* page_right@2x.png */,
+				04CBD3BB17396D1200A5E440 /* progress_bar.png */,
+				04CBD3BC17396D1200A5E440 /* progress_bar@2x.png */,
+				04CBD3BD17396D1200A5E440 /* Stroke2px.png */,
+				04CBD3BE17396D1200A5E440 /* Stroke2px@2x.png */,
+				04CBD3BF17396D1200A5E440 /* Stroke2px_single.png */,
+				04CBD3C017396D1200A5E440 /* Stroke2px_single@2x.png */,
+				04CBD3C117396D1200A5E440 /* X.png */,
+				04CBD3C217396D1200A5E440 /* X@2x.png */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				04F138BE1701AEC00051C0E0 /* RoboAppDelegate.h */,
+				04F138BF1701AEC00051C0E0 /* RoboAppDelegate.m */,
+				04F138C21701AEC00051C0E0 /* RoboDemoController.h */,
+				04F138C31701AEC00051C0E0 /* RoboDemoController.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* RoboReader.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				044B427617032473002ADE90 /* Demo */,
+				04CBD39717396D1200A5E440 /* RoboReader */,
+				04C55FA3173A7295007791DE /* README.md */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				04EB51F6170AF9190095CA89 /* f5_newspaper.pdf */,
+				04B304511609C0E60000CDDA /* RoboReader-Info.plist */,
+				04B304521609C0E60000CDDA /* RoboReader-Prefix.pch */,
+				04B304531609C0E60000CDDA /* main.m */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
+				450A670311D27B9D00014BF5 /* QuartzCore.framework */,
+				45BD5AFD13AE721A00D6FE97 /* MessageUI.framework */,
+				458DDFD6140D45FA00C5DA94 /* ImageIO.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		450A66D911D27B5800014BF5 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				044B432417034644002ADE90 /* icon_29.png */,
+				044B432517034644002ADE90 /* icon_50.png */,
+				044B432617034644002ADE90 /* icon_72.png */,
+				044B432717034644002ADE90 /* icon_144.png */,
+				044B432817034644002ADE90 /* icon_512.png */,
+				044B432917034644002ADE90 /* icon_1024.png */,
+			);
+			name = Graphics;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* RoboReader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "RoboReader" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RoboReader;
+			productName = Reader;
+			productReference = 1D6058910D05DD3D006BFB54 /* RoboReader.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "RoboReader" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+				jp,
+				fr,
+				de,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* RoboReader */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				044B432A17034644002ADE90 /* icon_29.png in Resources */,
+				044B432B17034644002ADE90 /* icon_50.png in Resources */,
+				044B432C17034644002ADE90 /* icon_72.png in Resources */,
+				044B432D17034644002ADE90 /* icon_144.png in Resources */,
+				044B432E17034644002ADE90 /* icon_512.png in Resources */,
+				044B432F17034644002ADE90 /* icon_1024.png in Resources */,
+				04EB51F7170AF91A0095CA89 /* f5_newspaper.pdf in Resources */,
+				04CBD3CE17396D1200A5E440 /* back_button.png in Resources */,
+				04CBD3CF17396D1200A5E440 /* back_button@2x.png in Resources */,
+				04CBD3D017396D1200A5E440 /* nav_bar_plashka.png in Resources */,
+				04CBD3D117396D1200A5E440 /* nav_bar_plashka@2x.png in Resources */,
+				04CBD3D217396D1200A5E440 /* page-bg.png in Resources */,
+				04CBD3D317396D1200A5E440 /* page-bg@2x.png in Resources */,
+				04CBD3D417396D1200A5E440 /* page_left.png in Resources */,
+				04CBD3D517396D1200A5E440 /* page_left@2x.png in Resources */,
+				04CBD3D617396D1200A5E440 /* page_right.png in Resources */,
+				04CBD3D717396D1200A5E440 /* page_right@2x.png in Resources */,
+				04CBD3D817396D1200A5E440 /* progress_bar.png in Resources */,
+				04CBD3D917396D1200A5E440 /* progress_bar@2x.png in Resources */,
+				04CBD3DA17396D1200A5E440 /* Stroke2px.png in Resources */,
+				04CBD3DB17396D1200A5E440 /* Stroke2px@2x.png in Resources */,
+				04CBD3DC17396D1200A5E440 /* Stroke2px_single.png in Resources */,
+				04CBD3DD17396D1200A5E440 /* Stroke2px_single@2x.png in Resources */,
+				04CBD3DE17396D1200A5E440 /* X.png in Resources */,
+				04CBD3DF17396D1200A5E440 /* X@2x.png in Resources */,
+				04C55FA4173A7295007791DE /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04B304561609C0E60000CDDA /* main.m in Sources */,
+				04F138C41701AEC00051C0E0 /* RoboAppDelegate.m in Sources */,
+				04F138C61701AEC00051C0E0 /* RoboDemoController.m in Sources */,
+				04CBD3C317396D1200A5E440 /* CGPDFDocument.m in Sources */,
+				04CBD3C417396D1200A5E440 /* PDFPageConverter.m in Sources */,
+				04CBD3C517396D1200A5E440 /* PDFPageRenderer.m in Sources */,
+				04CBD3C617396D1200A5E440 /* RoboConstants.m in Sources */,
+				04CBD3C717396D1200A5E440 /* RoboContentView.m in Sources */,
+				04CBD3C817396D1200A5E440 /* RoboDocument.m in Sources */,
+				04CBD3C917396D1200A5E440 /* RoboMainPagebar.m in Sources */,
+				04CBD3CA17396D1200A5E440 /* RoboMainToolbar.m in Sources */,
+				04CBD3CB17396D1200A5E440 /* RoboPDFController.m in Sources */,
+				04CBD3CC17396D1200A5E440 /* RoboPDFModel.m in Sources */,
+				04CBD3CD17396D1200A5E440 /* RoboViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Resources/RoboReader-Prefix.pch";
+				INFOPLIST_FILE = "Resources/RoboReader-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = RoboReader;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Resources/RoboReader-Prefix.pch";
+				INFOPLIST_FILE = "Resources/RoboReader-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = RoboReader;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		458529CE13DDE2DF00EDC79D /* Testing */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Aydar Mukhametyanov (28LJ99WCN7)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_MODEL_TUNING = "";
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "674107E8-51FB-42F5-82E0-A7C3F69E237F";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Testing;
+		};
+		458529CF13DDE2DF00EDC79D /* Testing */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Resources/RoboReader-Prefix.pch";
+				INFOPLIST_FILE = "Resources/RoboReader-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = RoboReader;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Testing;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Aydar Mukhametyanov (28LJ99WCN7)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_MODEL_TUNING = "";
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PROVISIONING_PROFILE = "674107E8-51FB-42F5-82E0-A7C3F69E237F";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Aydar Mukhametyanov (28LJ99WCN7)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_MODEL_TUNING = "";
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "674107E8-51FB-42F5-82E0-A7C3F69E237F";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "RoboReader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				458529CF13DDE2DF00EDC79D /* Testing */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "RoboReader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				458529CE13DDE2DF00EDC79D /* Testing */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "1.0">
+   <FileBreakpoints>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686071.891833"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "614"
+         endingLineNumber = "614"
+         landmarkName = "-scrollViewDidScroll:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686074.530838"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "620"
+         endingLineNumber = "620"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686082.787555"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "611"
+         endingLineNumber = "611"
+         landmarkName = "-scrollViewDidScroll:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboViewController.m"
+         timestampString = "386686339.616787"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "17"
+         endingLineNumber = "17"
+         landmarkName = "-showDocument"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686377.868126"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "196"
+         endingLineNumber = "196"
+         landmarkName = "-initWithFrame:document:pdfController:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686403.21148"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "623"
+         endingLineNumber = "623"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686420.155107"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "624"
+         endingLineNumber = "624"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686477.65768"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "651"
+         endingLineNumber = "651"
+         landmarkName = "-initSmallPageView:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686489.241266"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "626"
+         endingLineNumber = "626"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686497.408998"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "629"
+         endingLineNumber = "629"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686513.160367"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "646"
+         endingLineNumber = "646"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686514.40923"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "648"
+         endingLineNumber = "648"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686726.667821"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "634"
+         endingLineNumber = "634"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "../RoboReaderFramework/Classes/RoboMainPagebar.m"
+         timestampString = "386686804.402205"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "630"
+         endingLineNumber = "630"
+         landmarkName = "-updateFirstAndLastPagesOnScreen2:withRemoving:"
+         landmarkType = "5">
+      </FileBreakpoint>
+   </FileBreakpoints>
+</Bucket>
