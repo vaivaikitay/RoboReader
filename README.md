@@ -5,7 +5,7 @@ With a couple of lines of code you can create a PDF view controller. This framew
 
 ![Mind Blown](https://raw.github.com/videlalvaro/gifsockets/master/doc/mybrain.gif)
 
-Sample usage
+## Sample usage
 
 Add RoboReader files to your project; import "RoboViewController.h"
 
@@ -18,7 +18,7 @@ Create a RoboViewController instance and present it as a child view controller. 
 RoboReader was created by [Mikhail Viceman](https://github.com/vaivaikitay) in the development of  [Digital Edition platform (Copyright (c) REDMADROBOT)](http://digitaled.ru).
 
 
-### Creators
+## Creators
 
 [Mikhail Viceman](https://github.com/vaivaikitay)
 [@vaivaikitay](https://twitter.com/vaivaikitay)
