@@ -46,6 +46,7 @@
 
         viewQueue = [[NSOperationQueue alloc] init];
         [viewQueue setMaxConcurrentOperationCount:8];
+        
         opDict = [[NSMutableDictionary alloc] init];
         pagesQueue = [[NSOperationQueue alloc] init];
         [pagesQueue setMaxConcurrentOperationCount:2];
@@ -170,12 +171,7 @@
 
 
 - (void)getPagesContentFromPage:(int)minValue toPage:(int)maxVal isLands:(BOOL)isLands {
-#ifdef HARDCORX
-	NSLog(@"%s", __FUNCTION__);
-#endif
-
-    NSLog(@"%i %i", minValue, maxVal);
-
+    
     [pagesQueue cancelAllOperations];
 
     NSOperation *pagesOp = [NSBlockOperation blockOperationWithBlock:^{

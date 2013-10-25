@@ -1,9 +1,6 @@
-[![Build Status](https://travis-ci.org/AFNetworking/AFNetworking.png?branch=master)](https://travis-ci.org/AFNetworking/AFNetworking)
 
 With a couple of lines of code you can create a PDF view controller. This framework is very fast and easy to use.
 
-
-![Mind Blown](https://raw.github.com/videlalvaro/gifsockets/master/doc/mybrain.gif)
 
 ## Sample usage
 
