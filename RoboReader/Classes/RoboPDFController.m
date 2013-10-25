@@ -189,36 +189,36 @@
             for (NSNumber *key in [loadedPages allObjects]) {
 
 
-                NSOperation *op = opDict[key];
+                NSOperation *renderOperation = opDict[key];
 
                 if ([key intValue] == _currentPage || [key intValue] == _currentPage + 1) {
 
-                    [op setQueuePriority:NSOperationQueuePriorityVeryHigh];
+                    [renderOperation setQueuePriority:NSOperationQueuePriorityVeryHigh];
 
                 }
                 else if ((_currentPage - [key intValue] >= 3) || ([key intValue] - _currentPage >= 4)) {
 
-                    [op cancel];
+                    [renderOperation cancel];
                     [loadedPages removeObject:key];
 
                 }
                 else {
-                    [op setQueuePriority:NSOperationQueuePriorityNormal];
+                    [renderOperation setQueuePriority:NSOperationQueuePriorityNormal];
                 }
             }
         }
         else {
             for (NSNumber *key in [loadedPages allObjects]) {
-                NSOperation *op = opDict[key];
+                NSOperation *renderOperation = opDict[key];
                 if ([key intValue] == _currentPage) {
-                    [op setQueuePriority:NSOperationQueuePriorityVeryHigh];
+                    [renderOperation setQueuePriority:NSOperationQueuePriorityVeryHigh];
                 }
                 else if (abs([key intValue] - _currentPage) >= 2) {
                     [loadedPages removeObject:key];
-                    [op cancel];
+                    [renderOperation cancel];
                 }
                 else {
-                    [op setQueuePriority:NSOperationQueuePriorityNormal];
+                    [renderOperation setQueuePriority:NSOperationQueuePriorityNormal];
                 }
             }
         }

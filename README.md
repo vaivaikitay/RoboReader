@@ -6,8 +6,16 @@ With a couple of lines of code you can create a PDF view controller. This framew
 
 Add RoboReader files to your project; import "RoboViewController.h"
 
-Create a RoboDocument instance for the PDF file you want to display. NSString *path = [[NSBundle mainBundle] PathForResource:@"YourPdf" withExtension:@"pdf"]; RoboDocument *document = [[RoboDocument alloc] initWithFilePath:url password:@"YourPdfPassword_or_nil"]
-Create a RoboViewController instance and present it as a child view controller. RoboViewController *r = [[RoboViewController alloc] initWithDocument:document];
+Create a RoboDocument instance for the PDF file you want to display.
+
+NSString *path = [[NSBundle mainBundle] PathForResource:@"YourPdf" withExtension:@"pdf"]; 
+
+RoboDocument *document = [[RoboDocument alloc] initWithFilePath:url password:@"YourPdfPassword_or_nil"]
+
+
+Create a RoboViewController instance and present it as a child view controller.
+
+RoboViewController *r = [[RoboViewController alloc] initWithDocument:document];
 
 
 ## Credits
