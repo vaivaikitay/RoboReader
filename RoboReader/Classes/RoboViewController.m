@@ -65,10 +65,11 @@
     CGFloat contentHeight = theScrollView.bounds.size.height;
 
     CGFloat contentWidth;
+    
     if (isLandscape)
-        contentWidth = 1024.0f * (count / 2 + 1);
+        contentWidth = CGRectGetWidth(self.view.frame) * (count / 2 + 1);
     else
-        contentWidth = 768.0f * count;
+        contentWidth = CGRectGetWidth(self.view.frame) * count;
 
     theScrollView.contentSize = CGSizeMake(contentWidth, contentHeight);
 
@@ -261,6 +262,10 @@
             small_document = small_object;
 
             robo = self;
+            
+            // get the current device orientation to determine initial isLandscape variable
+            UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+            isLandscape = interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight;
         }
     }
 
@@ -300,15 +305,10 @@
 }
 
 - (void)nextPage:(id)sender {
-
+#warning fix this too
     [self hideBars];
     CGPoint newContOffset = theScrollView.contentOffset;
-    if (isLandscape) {
-        newContOffset.x += 1024.0f;
-    }
-    else {
-        newContOffset.x += 768.0f;
-    }
+    newContOffset.x += CGRectGetWidth(self.view.frame);
     if (newContOffset.x < theScrollView.contentSize.width) {
         [UIView animateWithDuration:0.5f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [theScrollView setContentOffset:newContOffset];
@@ -322,12 +322,7 @@
 
     [self hideBars];
     CGPoint newContOffset = theScrollView.contentOffset;
-    if (isLandscape) {
-        newContOffset.x -= 1024.0f;
-    }
-    else {
-        newContOffset.x -= 768.0f;
-    }
+    newContOffset.x -= CGRectGetWidth(self.view.frame);
     if (newContOffset.x >= 0) {
         [UIView animateWithDuration:0.5f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [theScrollView setContentOffset:newContOffset];
@@ -505,24 +500,24 @@
 
         if (![[UIApplication sharedApplication] isStatusBarHidden]) {
 
-            [self.view setBounds:CGRectMake(0, 0, 1024.0f, 768.0f)];
-            [self.view setFrame:CGRectMake(0, -20.0f, 1024.0f, 768.0f)];
+            [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+            [self.view setFrame:CGRectMake(0, -20.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
 
         }
 
-        [leftButton setFrame:CGRectMake(0, 0, 66.0f, 768.0f)];
-        [rightButton setFrame:CGRectMake(958.0f, 0, 66.0f, 768.0f)];
+        [leftButton setFrame:CGRectMake(0, 0, 66.0f, CGRectGetHeight(self.view.frame))];
+        [rightButton setFrame:CGRectMake(958.0f, 0, 66.0f, CGRectGetHeight(self.view.frame))];
 
     }
     else {
         if (![[UIApplication sharedApplication] isStatusBarHidden]) {
 
-            [self.view setBounds:CGRectMake(0, 0, 768.0f, 1024.0f)];
-            [self.view setFrame:CGRectMake(0, -20.0f, 768.0f, 1024.0f)];
+            [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+            [self.view setFrame:CGRectMake(0, -20.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
 
         }
-        [leftButton setFrame:CGRectMake(0, 0, 66.0f, 1024.0f)];
-        [rightButton setFrame:CGRectMake(702.0f, 0, 66.0f, 1024.0f)];
+        [leftButton setFrame:CGRectMake(0, 0, 66.0f, CGRectGetHeight(self.view.frame))];
+        [rightButton setFrame:CGRectMake(702.0f, 0, 66.0f, CGRectGetHeight(self.view.frame))];
 
     }
 
@@ -581,13 +576,14 @@
         int currentPage = [document.currentPage intValue];
         int page;
         if (isLandscape) {
-            pageWidth = 512.0f;
+#warning fix this
+            pageWidth = CGRectGetWidth(self.view.frame) / 2;
             page = floor((theScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
             if (currentPage != page && currentPage != page + 1 && currentPage != page - 1)
                 [self showDocumentPage:page fastScroll:YES];
         }
         else {
-            pageWidth = 768.0f;
+            pageWidth = CGRectGetWidth(self.view.frame);
             page = floor((theScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 2;
             if (currentPage != page)
                 [self showDocumentPage:page fastScroll:YES];

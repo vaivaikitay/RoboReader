@@ -55,7 +55,7 @@
 
         CGFloat titleX = TITLE_X;
         CGFloat titleWidth = (self.bounds.size.width - (titleX * 2.0f));
-
+#warning fix the number 1024
         UIImageView *toolbarImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 1024.0f, frame.size.height)];
         [toolbarImg setImage:[UIImage imageNamed:@"nav_bar_plashka.png"]];
         [self addSubview:toolbarImg];

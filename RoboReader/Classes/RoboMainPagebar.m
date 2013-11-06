@@ -468,6 +468,7 @@
 
 - (void)updateFirstAndLastPagesOnScreen2:(float)offset withRemoving:(BOOL)withRemoving {
     if (inited) {
+#warning fix the number 1024
         int newBeginPage = floor((offset - previewPageWidth) / (THUMB_SMALL_GAP / 2 + previewPageWidth)) + 1;
         int newEndPage = floor((offset + 1024) / (THUMB_SMALL_GAP / 2 + previewPageWidth)) + 2;
 
@@ -622,6 +623,7 @@
 }
 
 - (BOOL)onScreen:(int)i {
+#warning fix the number 1024
     int onScreenBeginPage = floor((trackControl.contentOffset.x - previewPageWidth) / (THUMB_SMALL_GAP / 2 + previewPageWidth)) + 1;
     int onScreenEndPage = floor((trackControl.contentOffset.x + 1024) / (THUMB_SMALL_GAP / 2 + previewPageWidth)) + 2;
 

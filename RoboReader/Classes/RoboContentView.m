@@ -72,6 +72,7 @@
 		theScrollView.autoresizesSubviews = NO;
 		theScrollView.bouncesZoom = YES;
 		theScrollView.delegate = self;
+        theScrollView.directionalLockEnabled = YES;
         
         theContainerView = [[UIView alloc] initWithFrame:self.bounds];
         theContainerView.autoresizesSubviews = NO;
@@ -102,7 +103,7 @@
                 theContentViewImagePDF = [[UIImageView alloc] init];
                 [theContentViewImagePDF setBackgroundColor:[UIColor blackColor]];
                 
-                CGRect landsFrame = CGRectMake(512, 0, 512, 768);
+                CGRect landsFrame = CGRectMake(CGRectGetWidth(frame) / 2, 0, CGRectGetWidth(frame) / 2, CGRectGetHeight(frame));
                 
                 theContentViewImage2PDF = [[UIImageView alloc] init];
                 pageNumberTextField2 =  [[UITextField alloc] initWithFrame:landsFrame];
@@ -116,7 +117,7 @@
             }
             else {
                 
-                CGRect landsFrame = CGRectMake(0, 0, 512, 768);
+                CGRect landsFrame = CGRectMake(0, 0, CGRectGetWidth(frame) / 2, CGRectGetHeight(frame));
                 
                 theContentViewImagePDF = [[UIImageView alloc] init];
                 
@@ -132,7 +133,8 @@
                 theContentViewImage2PDF = [[UIImageView alloc] init];
                 if (page != [RoboPDFModel instance].numberOfPages) {
                     
-                    landsFrame.origin.x = 512.0f;
+#warning fix this
+                    landsFrame.origin.x = CGRectGetWidth(self.frame) / 2;
                     pageNumberTextField2 =  [[UITextField alloc] initWithFrame:landsFrame];
                     [pageNumberTextField2 setText:[NSString stringWithFormat:@"%i", page + 1]];
                     [pageNumberTextField2 setTextColor:[UIColor whiteColor]];
@@ -205,8 +207,7 @@
                 [pageNumberTextField2 removeFromSuperview];
                 pageNumberTextField2 = nil;
 
-
-                CGRect pdfSize2 = [RoboPDFModel getPdfRectsWithSize:pageBarImage.size isLands:_isLandscape]; pdfSize2.origin.x = 512.0f;
+                CGRect pdfSize2 = [RoboPDFModel getPdfRectsWithSize:pageBarImage.size isLands:_isLandscape]; pdfSize2.origin.x = CGRectGetWidth(self.frame) / 2;
                 [theContentViewImage2PDF setFrame:pdfSize2];
                 [theContentViewImage2PDF setImage:pageBarImage];
 

@@ -43,22 +43,22 @@
 
 + (CGRect)getPdfRectsWithSize:(CGSize)onePageSize isLands:(BOOL)isLands {
     
-    
+    CGRect bounds = [[UIScreen mainScreen] bounds];
     if (!isLands) {
         // set sizes for portrait pdf - it will save processor time -
         // but each pdf page must be the same size
         CGFloat widthPortrNew; CGFloat heightPortrNew;
         CGFloat originPortrX; CGFloat originPortrY;
-        heightPortrNew = 1024.0f;
-        widthPortrNew = 1024.0f * onePageSize.width / onePageSize.height;
-        if (widthPortrNew > 768.0f) {
-            widthPortrNew = 768.0f;
-            heightPortrNew = 768.0f * onePageSize.height / onePageSize.width;
+        heightPortrNew = CGRectGetHeight(bounds);
+        widthPortrNew = CGRectGetHeight(bounds) * onePageSize.width / onePageSize.height;
+        if (widthPortrNew > CGRectGetWidth(bounds)) {
+            widthPortrNew = CGRectGetWidth(bounds);
+            heightPortrNew = CGRectGetWidth(bounds) * onePageSize.height / onePageSize.width;
             originPortrX = 0;
-            originPortrY = (1024.0f - heightPortrNew) / 2.0f;
+            originPortrY = (CGRectGetHeight(bounds) - heightPortrNew) / 2.0f;
         }
         else {
-            originPortrX = (768.0f - widthPortrNew) / 2.0f;
+            originPortrX = (CGRectGetWidth(bounds) - widthPortrNew) / 2.0f;
             originPortrY = 0;
         }
         return CGRectMake(originPortrX, originPortrY, widthPortrNew, heightPortrNew);
@@ -67,18 +67,18 @@
         // set sizes for landscapes pdf
         CGFloat widthLandsNew; CGFloat heightLandsNew;
         CGFloat originLandsX; CGFloat originLandsY;
-        widthLandsNew = 512.0f;
-        heightLandsNew = 512.0f * onePageSize.height / onePageSize.width;
-        if (heightLandsNew > 768.0f) {
+        widthLandsNew = CGRectGetHeight(bounds) / 2;
+        heightLandsNew = CGRectGetHeight(bounds) / 2 * onePageSize.height / onePageSize.width;
+        if (heightLandsNew > CGRectGetWidth(bounds)) {
             
-            heightLandsNew = 768.0f;
-            widthLandsNew = 768.0f * onePageSize.width / onePageSize.height;
-            originLandsX = 512.0f - widthLandsNew;
+            heightLandsNew = CGRectGetWidth(bounds);
+            widthLandsNew = CGRectGetWidth(bounds) * onePageSize.width / onePageSize.height;
+            originLandsX = CGRectGetHeight(bounds) / 2 - widthLandsNew;
             originLandsY = 0;
         }
         else {
             originLandsX = 0;
-            originLandsY = (768.0f - heightLandsNew) / 2.0f;
+            originLandsY = (CGRectGetWidth(bounds) - heightLandsNew) / 2.0f;
         }
         return CGRectMake(originLandsX, originLandsY, widthLandsNew, heightLandsNew);
     }
