@@ -55,13 +55,15 @@
 
         CGFloat titleX = TITLE_X;
         CGFloat titleWidth = (self.bounds.size.width - (titleX * 2.0f));
-#warning fix the number 1024
+#warning fix the number 1024, reset toolbar img frame on orientation change
         UIImageView *toolbarImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 1024.0f, frame.size.height)];
         [toolbarImg setImage:[UIImage imageNamed:@"nav_bar_plashka.png"]];
         [self addSubview:toolbarImg];
 
+        // shift buttons a little to avoid overlapping with ios7 status bar
+        float ios7padding = (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) ? 7.0f : 0.0f;
 
-        CGRect titleRect = CGRectMake(titleX, TITLE_Y, titleWidth, TITLE_HEIGHT);
+        CGRect titleRect = CGRectMake(titleX, TITLE_Y + ios7padding, titleWidth, TITLE_HEIGHT);
 
         theTitleLabel = [[UILabel alloc] initWithFrame:titleRect];
 
@@ -81,7 +83,7 @@
 
         [doneButton addTarget:self action:@selector(doneButtonTapped:) forControlEvents:UIControlEventTouchDown];
 
-        UIImageView *backImage = [[UIImageView alloc] initWithFrame:CGRectMake((READER_TOOLBAR_HEIGHT - 18) / 2, (READER_TOOLBAR_HEIGHT - 18) / 2, 13, 18)];
+        UIImageView *backImage = [[UIImageView alloc] initWithFrame:CGRectMake((READER_TOOLBAR_HEIGHT - 18) / 2, (READER_TOOLBAR_HEIGHT - 18) / 2 + ios7padding, 13, 18)];
         [backImage setImage:[UIImage imageNamed:@"back_button.png"]];
         [doneButton addSubview:backImage];
 

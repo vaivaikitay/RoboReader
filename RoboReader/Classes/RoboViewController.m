@@ -305,7 +305,6 @@
 }
 
 - (void)nextPage:(id)sender {
-#warning fix this too
     [self hideBars];
     CGPoint newContOffset = theScrollView.contentOffset;
     newContOffset.x += CGRectGetWidth(self.view.frame);
@@ -383,7 +382,9 @@
 
     CGRect toolbarRect = viewRect;
     toolbarRect.size.height = READER_TOOLBAR_HEIGHT;
-    toolbarRect.origin.y = 20.0f;
+    
+    // if it is ios7+, just use all the status bar space
+    toolbarRect.origin.y = (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) ? 0.0f : 20.0f;
     NSString *toolbarTitle = (self.title == nil) ? [document.fileName stringByDeletingPathExtension] : self.title;
 
     mainToolbar = [[RoboMainToolbar alloc] initWithFrame:toolbarRect title:toolbarTitle];
@@ -393,8 +394,8 @@
     [self.view addSubview:mainToolbar];
 
     CGRect pagebarRect = viewRect;
-    pagebarRect.size.height = PAGEBAR_HEIGHT;
-    pagebarRect.origin.y = (viewRect.size.height - PAGEBAR_HEIGHT);
+    pagebarRect.size.height = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? PAGEBAR_HEIGHT_PAD : PAGEBAR_HEIGHT_PHONE;
+    pagebarRect.origin.y = (viewRect.size.height - pagebarRect.size.height);
 
     if (smallPdfController != nil) {
         mainPagebar = [[RoboMainPagebar alloc] initWithFrame:pagebarRect document:document pdfController:smallPdfController];
@@ -576,7 +577,6 @@
         int currentPage = [document.currentPage intValue];
         int page;
         if (isLandscape) {
-#warning fix this
             pageWidth = CGRectGetWidth(self.view.frame) / 2;
             page = floor((theScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
             if (currentPage != page && currentPage != page + 1 && currentPage != page - 1)

@@ -133,7 +133,6 @@
                 theContentViewImage2PDF = [[UIImageView alloc] init];
                 if (page != [RoboPDFModel instance].numberOfPages) {
                     
-#warning fix this
                     landsFrame.origin.x = CGRectGetWidth(self.frame) / 2;
                     pageNumberTextField2 =  [[UITextField alloc] initWithFrame:landsFrame];
                     [pageNumberTextField2 setText:[NSString stringWithFormat:@"%i", page + 1]];

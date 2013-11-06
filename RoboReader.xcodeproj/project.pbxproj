@@ -53,6 +53,7 @@
 		450A670411D27B9D00014BF5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 450A670311D27B9D00014BF5 /* QuartzCore.framework */; };
 		458DDFD7140D45FA00C5DA94 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 458DDFD6140D45FA00C5DA94 /* ImageIO.framework */; };
 		45BD5AFE13AE721A00D6FE97 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BD5AFD13AE721A00D6FE97 /* MessageUI.framework */; };
+		67441C48182A60F7007A68B9 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 67441C47182A60F7007A68B9 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,6 +120,7 @@
 		450A670311D27B9D00014BF5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		458DDFD6140D45FA00C5DA94 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		45BD5AFD13AE721A00D6FE97 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		67441C47182A60F7007A68B9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -236,6 +238,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				67441C47182A60F7007A68B9 /* Default-568h@2x.png */,
 				044B427617032473002ADE90 /* Demo */,
 				04CBD39717396D1200A5E440 /* RoboReader */,
 				04C55FA3173A7295007791DE /* README.md */,
@@ -343,6 +346,7 @@
 				04CBD3CF17396D1200A5E440 /* back_button@2x.png in Resources */,
 				04CBD3D017396D1200A5E440 /* nav_bar_plashka.png in Resources */,
 				04CBD3D117396D1200A5E440 /* nav_bar_plashka@2x.png in Resources */,
+				67441C48182A60F7007A68B9 /* Default-568h@2x.png in Resources */,
 				04CBD3D217396D1200A5E440 /* page-bg.png in Resources */,
 				04CBD3D317396D1200A5E440 /* page-bg@2x.png in Resources */,
 				04CBD3D417396D1200A5E440 /* page_left.png in Resources */,

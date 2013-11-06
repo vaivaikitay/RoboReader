@@ -24,11 +24,24 @@
 
 
 #define READER_TOOLBAR_HEIGHT 44.0f
-#define PAGEBAR_HEIGHT 190.0f
+
+#define PAGEBAR_HEIGHT_PAD 190.0f
+#define PAGEBAR_HEIGHT_PHONE 110.0f
+
+// following values are for iPads. For iPhones half of them are used.
+#define THUMB_SMALL_GAP 13.0f
+#define THUMB_SMALL_HEIGHT 120.0f
+
+#define PAGE_NUMBER_WIDTH 74.0f
+#define PAGE_NUMBER_HEIGHT 22.0f
+
+#define SLIDER_HEIGHT 40.0f
+#define SCROLL_SLIDER_GAP 4.0f
+#define TOP_SCROLL_GAP  16.0f
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define UIColorFromRGBWithAlpha(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:0.99]
-
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
 
 #import <Foundation/Foundation.h>
