@@ -24,7 +24,7 @@ RoboViewController *r = [[RoboViewController alloc] initWithDocument:document];
 
 ## Credits
 
-RoboReader was created by [Mikhail Viceman](https://github.com/vaivaikitay) in the development of  [Digital Edition platform (Copyright (c) REDMADROBOT)](http://digitaled.ru).
+RoboReader was created by [Mikhail Viceman](https://github.com/vaivaikitay) in the development of  [Digital Edition platform] (http://digitaled.ru) [Copyright (c) REDMADROBOT] (http://redmadrobot.ru).
 
 
 ## Creators
