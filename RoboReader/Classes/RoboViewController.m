@@ -241,7 +241,7 @@
 }
 
 
-- (id)initWithRoboDocument:(RoboDocument *)object small_document:(RoboDocument *)small_object {
+- (id)initWithRoboDocument:(RoboDocument *)object {
 
 
     id robo = nil; // RoboViewController object
@@ -259,7 +259,6 @@
 
             document = object;
 
-            small_document = small_object;
 
             robo = self;
             
@@ -350,12 +349,12 @@
     pdfController.viewDelegate = self;
     pdfController.fileURL = document.fileURL;
     pdfController.password = document.password;
-
-    if (small_document != nil) {
-        smallPdfController = [[RoboPDFController alloc] initWithDocument:small_document];
-        smallPdfController.viewDelegate = self;
-        smallPdfController.isSmall = YES;
-    }
+//
+//    if (small_document != nil) {
+//        smallPdfController = [[RoboPDFController alloc] initWithDocument:small_document];
+//        smallPdfController.viewDelegate = self;
+//        smallPdfController.isSmall = YES;
+//    }
 
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 

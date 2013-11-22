@@ -46,8 +46,6 @@
 @private
 
     RoboDocument *document;
-    RoboDocument *small_document;
-
 
     UIScrollView *theScrollView;
     RoboPDFController *pdfController;
@@ -73,6 +71,7 @@
 
 @property(nonatomic, unsafe_unretained, readwrite) id <RoboViewControllerDelegate> delegate;
 
-- (id)initWithRoboDocument:(RoboDocument *)object small_document:(RoboDocument *)small_object;
+- (id)initWithRoboDocument:(RoboDocument *)object;
+//- (id)initWithRoboDocument:(RoboDocument *)object small_document:(RoboDocument *)small_object;
 
 @end
