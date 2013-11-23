@@ -22,7 +22,9 @@
 #import "RoboDemoController.h"
 
 @implementation RoboDemoController
-
+{
+    RoboViewController *roboViewController;
+}
 
 - (void)viewDidLoad {
 
@@ -65,7 +67,7 @@
     RoboDocument *document = [RoboDocument withDocumentFilePath:filePath password:password];
 
     if (document != nil) {
-        RoboViewController *roboViewController = [[RoboViewController alloc] initWithRoboDocument:document small_document:nil];
+        roboViewController = [[RoboViewController alloc] initWithRoboDocument:document small_document:nil];
 
         roboViewController.delegate = self;
 
