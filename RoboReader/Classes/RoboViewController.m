@@ -501,9 +501,14 @@
 
         if (![[UIApplication sharedApplication] isStatusBarHidden]) {
 
-            [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-            [self.view setFrame:CGRectMake(0, -20.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-
+            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+                [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+                [self.view setFrame:CGRectMake(0, 0.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+            } else {
+                [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+                [self.view setFrame:CGRectMake(0, -20.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+            }
+            
         }
 
         [leftButton setFrame:CGRectMake(0, 0, 66.0f, CGRectGetHeight(self.view.frame))];
@@ -513,8 +518,13 @@
     else {
         if (![[UIApplication sharedApplication] isStatusBarHidden]) {
 
-            [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-            [self.view setFrame:CGRectMake(0, -20.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+                [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+                [self.view setFrame:CGRectMake(0, 0.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+            } else {
+                [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+                [self.view setFrame:CGRectMake(0, -20.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+            }
 
         }
         [leftButton setFrame:CGRectMake(0, 0, 66.0f, CGRectGetHeight(self.view.frame))];
