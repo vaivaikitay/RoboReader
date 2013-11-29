@@ -3,9 +3,7 @@
 
 With a couple of lines of code you can create a PDF view controller. This framework is very fast and easy to use.
 
-
 ## Sample usage
-
 
 ``` objective-c
 
