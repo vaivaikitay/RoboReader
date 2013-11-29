@@ -8,10 +8,9 @@ Pod::Spec.new do |s|
                    DESC
 
   s.homepage     = "https://github.com/vaivaikitay/RoboReader"
-  # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
-  s.authors      = { "Mikhail Viceman" => "mikhail.viceman@gmail.com" , "Suleyman Melikoglu" => "suleymanmelikoglu@gmail.com" }
-  s.platform     = :ios, '6.0'
+  s.authors      = { "Mikhail Viceman" => "mikhail.viceman@gmail.com"}
+  s.platform     = :ios, '5.0'
   s.source       = { :git => "https://github.com/vaivaikitay/RoboReader" }
   s.source_files  = 'RoboReader/Classes/*.{h,m}'
   #s.exclude_files = 'Classes/Exclude'
