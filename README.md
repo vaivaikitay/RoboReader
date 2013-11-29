@@ -1,4 +1,6 @@
 
+[![Build Status](https://travis-ci.org/vaivaikitay/RoboReader.png?branch=master)](https://travis-ci.org/vaivaikitay/RoboReader)
+
 With a couple of lines of code you can create a PDF view controller. This framework is very fast and easy to use.
 
 
