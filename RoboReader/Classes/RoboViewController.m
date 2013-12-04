@@ -338,6 +338,14 @@
 
     NSAssert(!(document == nil), @"RoboDocument == nil");
 
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    else {
+        [self setWantsFullScreenLayout:YES];
+        
+    }
+    
     CGRect viewRect = self.view.bounds;
 
 
