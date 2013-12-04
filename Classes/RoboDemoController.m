@@ -67,7 +67,7 @@
     RoboDocument *document = [RoboDocument withDocumentFilePath:filePath password:password];
 
     if (document != nil) {
-        roboViewController = [[RoboViewController alloc] initWithRoboDocument:document small_document:nil];
+        roboViewController = [[RoboViewController alloc] initWithRoboDocument:document];
 
         roboViewController.delegate = self;
 
