@@ -81,13 +81,18 @@
         theContainerView.autoresizingMask = UIViewAutoresizingNone;
         theContainerView.backgroundColor = [UIColor blackColor];
         
+        
+        
         //portrait
         if (!isLandscape) {
             
             theContentViewImagePDF = [[UIImageView alloc] init];
             
+           
             pageNumberTextField =  [[UITextField alloc] initWithFrame:self.bounds];
-            [pageNumberTextField setText:[NSString stringWithFormat:@"%i", page]];
+            if (page <= [RoboPDFModel instance].numberOfPages) {
+                [pageNumberTextField setText:[NSString stringWithFormat:@"%i", page]];
+            }
             [pageNumberTextField setTextColor:[UIColor whiteColor]];
             [pageNumberTextField setTextAlignment:NSTextAlignmentCenter];
             [pageNumberTextField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
@@ -107,7 +112,9 @@
                 
                 theContentViewImage2PDF = [[UIImageView alloc] init];
                 pageNumberTextField2 =  [[UITextField alloc] initWithFrame:landsFrame];
-                [pageNumberTextField2 setText:[NSString stringWithFormat:@"%i", page]];
+                if (page <= [RoboPDFModel instance].numberOfPages) {
+                    [pageNumberTextField2 setText:[NSString stringWithFormat:@"%i", page]];
+                }
                 [pageNumberTextField2 setTextColor:[UIColor whiteColor]];
                 [pageNumberTextField2 setTextAlignment:NSTextAlignmentCenter];
                 [pageNumberTextField2 setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
@@ -122,7 +129,9 @@
                 theContentViewImagePDF = [[UIImageView alloc] init];
                 
                 pageNumberTextField =  [[UITextField alloc] initWithFrame:landsFrame];
-                [pageNumberTextField setText:[NSString stringWithFormat:@"%i", page]];
+                if (page <= [RoboPDFModel instance].numberOfPages) {
+                    [pageNumberTextField setText:[NSString stringWithFormat:@"%i", page]];
+                }
                 [pageNumberTextField setTextColor:[UIColor whiteColor]];
                 [pageNumberTextField setTextAlignment:NSTextAlignmentCenter];
                 [pageNumberTextField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
@@ -131,7 +140,7 @@
                 
                 
                 theContentViewImage2PDF = [[UIImageView alloc] init];
-                if (page != [RoboPDFModel instance].numberOfPages) {
+                if (page < [RoboPDFModel instance].numberOfPages) {
                     
                     landsFrame.origin.x = CGRectGetWidth(self.frame) / 2;
                     pageNumberTextField2 =  [[UITextField alloc] initWithFrame:landsFrame];
