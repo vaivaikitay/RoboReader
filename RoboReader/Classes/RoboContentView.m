@@ -18,7 +18,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 #import <QuartzCore/QuartzCore.h>
 #import "RoboContentView.h"
 #import "CGPDFDocument.h"
@@ -26,12 +25,7 @@
 #import "RoboPDFModel.h"
 #import "RoboPDFController.h"
 
-#define ZOOM_LEVELS 3
-
-@implementation RoboContentView {
-    BOOL flag1ZoomedLoaded;
-    BOOL flag2ZoomedLoaded;
-}
+@implementation RoboContentView
 
 
 - (void)updateMinimumMaximumZoom {
@@ -47,8 +41,8 @@
     
 	if ((self = [super initWithFrame:frame]))
 	{
+        
 
-        noTiledLayer = YES;
         pageNumber = page;
         _isLandscape = isLandscape;
         
@@ -72,49 +66,41 @@
 		theScrollView.autoresizesSubviews = NO;
 		theScrollView.bouncesZoom = YES;
 		theScrollView.delegate = self;
-        theScrollView.directionalLockEnabled = YES;
-        
+
         theContainerView = [[UIView alloc] initWithFrame:self.bounds];
         theContainerView.autoresizesSubviews = NO;
         theContainerView.userInteractionEnabled = NO;
         theContainerView.contentMode = UIViewContentModeRedraw;
         theContainerView.autoresizingMask = UIViewAutoresizingNone;
         theContainerView.backgroundColor = [UIColor blackColor];
-        
-        
-        
+
         //portrait
         if (!isLandscape) {
-            
+
             theContentViewImagePDF = [[UIImageView alloc] init];
-            
-           
+
             pageNumberTextField =  [[UITextField alloc] initWithFrame:self.bounds];
-            if (page <= [RoboPDFModel instance].numberOfPages) {
-                [pageNumberTextField setText:[NSString stringWithFormat:@"%i", page]];
-            }
+            [pageNumberTextField setText:[NSString stringWithFormat:@"%i", page]];
             [pageNumberTextField setTextColor:[UIColor whiteColor]];
             [pageNumberTextField setTextAlignment:NSTextAlignmentCenter];
             [pageNumberTextField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
             [pageNumberTextField setFont:[UIFont fontWithName:@"Helvetica-Bold" size:75]];
             [theContainerView addSubview:pageNumberTextField];
-            
+                      
         }
         //landscape
         else {
             
             if (page <= 1) {
-                
+
                 theContentViewImagePDF = [[UIImageView alloc] init];
                 [theContentViewImagePDF setBackgroundColor:[UIColor blackColor]];
                 
-                CGRect landsFrame = CGRectMake(CGRectGetWidth(frame) / 2, 0, CGRectGetWidth(frame) / 2, CGRectGetHeight(frame));
+                CGRect landsFrame = CGRectMake(512, 0, 512, 768);
                 
                 theContentViewImage2PDF = [[UIImageView alloc] init];
                 pageNumberTextField2 =  [[UITextField alloc] initWithFrame:landsFrame];
-                if (page <= [RoboPDFModel instance].numberOfPages) {
-                    [pageNumberTextField2 setText:[NSString stringWithFormat:@"%i", page]];
-                }
+                [pageNumberTextField2 setText:[NSString stringWithFormat:@"%i", page]];
                 [pageNumberTextField2 setTextColor:[UIColor whiteColor]];
                 [pageNumberTextField2 setTextAlignment:NSTextAlignmentCenter];
                 [pageNumberTextField2 setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
@@ -123,15 +109,13 @@
                 
             }
             else {
-                
-                CGRect landsFrame = CGRectMake(0, 0, CGRectGetWidth(frame) / 2, CGRectGetHeight(frame));
-                
+
+                CGRect landsFrame = CGRectMake(0, 0, 512, 768);
+
                 theContentViewImagePDF = [[UIImageView alloc] init];
-                
+
                 pageNumberTextField =  [[UITextField alloc] initWithFrame:landsFrame];
-                if (page <= [RoboPDFModel instance].numberOfPages) {
-                    [pageNumberTextField setText:[NSString stringWithFormat:@"%i", page]];
-                }
+                [pageNumberTextField setText:[NSString stringWithFormat:@"%i", page]];
                 [pageNumberTextField setTextColor:[UIColor whiteColor]];
                 [pageNumberTextField setTextAlignment:NSTextAlignmentCenter];
                 [pageNumberTextField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
@@ -140,9 +124,9 @@
                 
                 
                 theContentViewImage2PDF = [[UIImageView alloc] init];
-                if (page < [RoboPDFModel instance].numberOfPages) {
-                    
-                    landsFrame.origin.x = CGRectGetWidth(self.frame) / 2;
+                if (page != [RoboPDFModel instance].numberOfPages) {
+                   
+                    landsFrame.origin.x = 512.0f;
                     pageNumberTextField2 =  [[UITextField alloc] initWithFrame:landsFrame];
                     [pageNumberTextField2 setText:[NSString stringWithFormat:@"%i", page + 1]];
                     [pageNumberTextField2 setTextColor:[UIColor whiteColor]];
@@ -157,9 +141,9 @@
         
 		if (theContentViewImagePDF != nil) {
             
-            
+
             [theContainerView addSubview:theContentViewImagePDF];
-            
+
             if(( isLandscape) && (theContentViewImage2PDF != NULL)){ // Landscape
                 
                 [theContainerView addSubview:theContentViewImage2PDF];
@@ -169,23 +153,21 @@
             theScrollView.contentSize = theContainerView.bounds.size;
             [theScrollView setFrame:theContainerView.frame];
             
-			[theScrollView addSubview:theContainerView];
+			[theScrollView addSubview:theContainerView]; 
             
-			[self updateMinimumMaximumZoom];
+			[self updateMinimumMaximumZoom]; 
             
-			theScrollView.zoomScale = theScrollView.minimumZoomScale;
+			theScrollView.zoomScale = theScrollView.minimumZoomScale; 
 		}
         
-		[self addSubview:theScrollView];
+		[self addSubview:theScrollView]; 
         
 		[theScrollView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:NULL];
         
 		self.tag = page;
         
         flag1Loaded = NO;
-        flag1ZoomedLoaded = NO;
         flag2Loaded = NO;
-        flag2ZoomedLoaded = NO;
         
     }
     
@@ -193,32 +175,48 @@
 	return self;
 }
 
+- (void)pdfViewLoadingComplete:(RoboPDFView *)pdfView rightSide:(BOOL)rightSide {
+    
+   // dispatch_async(dispatch_get_main_queue(), ^{
+    
+    if (rightSide) {
+        
+        CGRect pdfSize2 = pdfView.frame; pdfSize2.origin.x = 512.0f;
+        [pdfView setFrame:pdfSize2];
+        
+    }
+    
+    pdfView.alpha = 0.0;
 
-- (void)pageContentLoadingComplete:(UIImage *)pageBarImage rightSide:(BOOL)rightSide zoomed:(BOOL)zoomed{
+    [theContainerView addSubview:pdfView];
+
+    [self performSelector:@selector(addPdfZoomedSubview:) withObject:pdfView afterDelay:1.0f];
+
+    
+   // });
+}
+
+
+- (void)addPdfZoomedSubview:(RoboPDFView *)pdfView {
+    
+    pdfView.alpha = 1.0;
+}
+
+- (void)pageContentLoadingComplete:(UIImage *)pageBarImage rightSide:(BOOL)rightSide {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-
-
+        
         if (rightSide) {
-
-
-            if (!flag2Loaded || !flag2ZoomedLoaded) {
-
-                if (!flag2Loaded)
-                    theContentViewImage2PDF.alpha = 0;
-
-                if (zoomed)
-                    flag2ZoomedLoaded = YES;
-
+            
+            if (!flag2Loaded) {
+                
                 flag2Loaded = YES;
-
                 [pageNumberTextField2 removeFromSuperview];
                 pageNumberTextField2 = nil;
-
-                CGRect pdfSize2 = [RoboPDFModel getPdfRectsWithSize:pageBarImage.size isLands:_isLandscape]; pdfSize2.origin.x = CGRectGetWidth(self.frame) / 2;
+                theContentViewImage2PDF.alpha = 0;
+                CGRect pdfSize2 = [RoboPDFModel getPdfRectsWithSize:pageBarImage.size isLands:_isLandscape]; pdfSize2.origin.x = 512.0f;
                 [theContentViewImage2PDF setFrame:pdfSize2];
                 [theContentViewImage2PDF setImage:pageBarImage];
-
                 [UIView animateWithDuration:0.3 delay:0.0
                                     options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                                  animations:^(void)
@@ -232,22 +230,15 @@
         }
         else {
             
-            if (!flag1Loaded || !flag1ZoomedLoaded) {
-
-                if (!flag1Loaded)
-                    theContentViewImagePDF.alpha = 0;
-
-                if (zoomed)
-                    flag1ZoomedLoaded = YES;
-
+            if (!flag1Loaded) {
+                
                 flag1Loaded = YES;
-
                 [pageNumberTextField removeFromSuperview];
                 pageNumberTextField = nil;
-                
+                theContentViewImagePDF.alpha = 0;
+
                 [theContentViewImagePDF setFrame:[RoboPDFModel getPdfRectsWithSize:pageBarImage.size isLands:_isLandscape]];
                 [theContentViewImagePDF setImage:pageBarImage];
-
                 [UIView animateWithDuration:0.3 delay:0.0
                                     options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                                  animations:^(void)
@@ -266,33 +257,27 @@
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-
-
-    return theContainerView;
+    
+    
+	return theContainerView;
 }
 
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
 
-    if (noTiledLayer) {
-        noTiledLayer = NO;
-        [_delegate getZoomedPages:pageNumber isLands:_isLandscape zoomIn:YES];
-
-    }
-
-}
 
 - (void)dealloc {
 
-    [theScrollView removeObserver:self forKeyPath:@"frame"];
+    NSLog(@"dealloc %i", pageNumber);
 
-    theScrollView = nil;
-
-    theContainerView = nil;
-
+	[theScrollView removeObserver:self forKeyPath:@"frame"];
+    
+	theScrollView = nil;
+    
+	theContainerView = nil;
+    
     theContentViewImagePDF = nil;
-
+    
     theContentViewImage2PDF = nil;
-
+    
 }
 
 @end

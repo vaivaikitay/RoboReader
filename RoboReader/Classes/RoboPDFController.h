@@ -23,61 +23,81 @@
 #import <Foundation/Foundation.h>
 #import "RoboDocument.h"
 
+
+@interface PDFPageRefObject : NSObject
+
+
+@property (nonatomic) CGPDFPageRef pageRef;
+
+@end
+
+@interface RoboPDFView : UIView {
+    CGPDFPageRef _onePDFPageRef;
+    float _scale;
+}
+
+- (id)initWithFrame:(CGRect)frame onePDFPageRef:(CGPDFPageRef)onePDFPageRef scale:(CGFloat)scale;
+
+@property (nonatomic) CGPDFPageRef onePDFPageRef;
+@property (nonatomic) float scale;
+
+@end
+
 @protocol PDFControllerDelegateToPagebar <NSObject>
 @required
 - (void)pagebarImageLoadingComplete:(UIImage *)pageBarImage page:(int)page;
 
-- (BOOL)isNeedLoad:(int)i;
+- (BOOL) isNeedLoad: (int) i;
 @end
 
 @protocol PDFControllerDelegateToView <NSObject>
 @required
-- (void)pageContentLoadingComplete:(int)page pageBarImage:(UIImage *)pageBarImage rightSide:(BOOL)rightSide zoomed:(BOOL)zoomed;
+- (void)reloadCurrentPage;
+- (void)pdfViewLoadingComplete:(int)page pdfView:(RoboPDFView *)pdfView rightSide:(BOOL)rightSide;
+
+- (void)pageContentLoadingComplete:(int)page pageBarImage:(UIImage *)pageBarImage rightSide:(BOOL)rightSide;
 @end
 
 
 @interface RoboPDFController : NSObject {
 @private
 
-    NSOperationQueue *viewQueue;
     NSOperationQueue *pagesQueue;
     NSOperationQueue *pagebarQueue;
 
-
-    BOOL isRetina;
-
-    CGPDFPageRef onePDFPageRef;
-
-    NSMutableDictionary *opDict;
-    NSMutableSet *loadedPages;
-
-    BOOL running;
+    NSMutableDictionary *pagesDict;
 
     CGPDFDocumentRef thePDFDocRef;
+
+    BOOL isRetina;
+    BOOL isRunning;
 
     NSString *pdfPassword;
     NSURL *pdfFileURL;
 
+
+    BOOL resetPdfDoc;
+
 }
 - (id)initWithDocument:(RoboDocument *)document;
 
-- (void)stopMashina;
-
 - (CGRect)getFirstPdfPageRect;
 
-- (void)getZoomedPageContent:(int)page isLands:(int)isLands;
+- (void)stopMashina;
+- (void)cleanMemory;
+- (void)getPageBarImages:(int)pages;
 
+//- (void)getZoomedPageContent:(int)page isLands:(int)isLands;
 - (void)getPagesContentFromPage:(int)minValue toPage:(int)maxValue isLands:(BOOL)isLands;
 
 - (void)addGettingPageBarImageToQueue:(int)i;
 
-@property(nonatomic, unsafe_unretained) id <PDFControllerDelegateToPagebar> pagebarDelegate;
-@property(nonatomic, unsafe_unretained) id <PDFControllerDelegateToView> viewDelegate;
-@property(nonatomic) int currentPage;
-@property(nonatomic) BOOL resetPdfDoc;
-@property(nonatomic) BOOL didRotate;
-@property(nonatomic, strong) NSString *password;
-@property(nonatomic, strong) NSURL *fileURL;
-@property(nonatomic) BOOL isSmall;
+@property (nonatomic, unsafe_unretained) id <PDFControllerDelegateToPagebar> pagebarDelegate;
+@property (nonatomic, unsafe_unretained) id <PDFControllerDelegateToView> viewDelegate;
+@property (strong, nonatomic) NSOperationQueue *viewQueue;
+@property (strong, nonatomic) NSMutableDictionary *opDict;
+@property (strong, nonatomic) NSMutableSet *loadedPages;
+@property (nonatomic) int currentPage;
 
 @end
+

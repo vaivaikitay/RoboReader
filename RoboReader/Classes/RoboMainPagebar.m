@@ -21,7 +21,10 @@
 
 
 #import "RoboMainPagebar.h"
+#import "RoboDocument.h"
 #import "RoboConstants.h"
+#import <QuartzCore/QuartzCore.h>
+#import "CGPDFDocument.h"
 #import "RoboPDFModel.h"
 
 @implementation ImagesFlags
@@ -29,86 +32,43 @@
 @synthesize isRendered;
 @synthesize onPageBar;
 
-- (NSString *)description {
+- (NSString*) description {
     return [NSString stringWithFormat:@"onPageBar = %d, isRendered = %d", onPageBar, isRendered];
 }
 
 @end
 
-/**
- *  UI size values from constants are encapsulated.
- *  This class adjusts the given constant sizes for the current device
- *  If the device is an iPhone, all sizes will be half. Otherwise
- *  the they will be untouched.
- */
-@interface RoboMainPagebarSizes : NSObject
-
-@property (nonatomic) float thumbSmallGap;
-@property (nonatomic) float thumbSmallHeight;
-@property (nonatomic) float pageNumberWidth;
-@property (nonatomic) float pageNumberHeight;
-@property (nonatomic) float sliderHeight;
-@property (nonatomic) float scrollSliderGap;
-@property (nonatomic) float topScrollGap;
-
-@end
-
-@implementation RoboMainPagebarSizes
-@synthesize thumbSmallGap, thumbSmallHeight, pageNumberWidth, pageNumberHeight, sliderHeight, scrollSliderGap, topScrollGap;
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        thumbSmallGap = THUMB_SMALL_GAP;
-        thumbSmallHeight = THUMB_SMALL_HEIGHT;
-        pageNumberWidth = PAGE_NUMBER_WIDTH;
-        pageNumberHeight = PAGE_NUMBER_HEIGHT;
-        sliderHeight = SLIDER_HEIGHT;
-        scrollSliderGap = SCROLL_SLIDER_GAP;
-        topScrollGap = TOP_SCROLL_GAP;
-        
-        // half of their size will be used for ipads
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            thumbSmallGap /= 2;
-            thumbSmallHeight /= 2;
-            pageNumberWidth /= 2;
-            sliderHeight /= 2;
-            scrollSliderGap /= 2;
-            topScrollGap /= 2;
-        }
-    }
-    return self;
-}
-
-@end
-
-
-@interface RoboMainPagebar ()
-
-
-
-@end
-
 @implementation RoboMainPagebar
-{
-    RoboMainPagebarSizes *sizes;
-}
+
 @synthesize pagesDict;
 @synthesize renderedPages;
 
 
+
+#define THUMB_SMALL_GAP 13.0f
+#define THUMB_SMALL_HEIGHT 120.0f
+
+#define PAGE_NUMBER_WIDTH 74.0f
+#define PAGE_NUMBER_HEIGHT 22.0f
+
+#define SLIDER_HEIGHT 40.0f
+#define SCROLL_SLIDER_GAP 4.0f
+#define TOP_SCROLL_GAP  16.0f
+
+
+
 - (id)initWithFrame:(CGRect)frame
-           document:(RoboDocument *)object pdfController:(RoboPDFController *)ipdfController {//    firstPage: (UIImage*) firstImage{
+           document:(RoboDocument *)object pdfController:(RoboPDFController *)ipdfController
+{//    firstPage: (UIImage*) firstImage{
 
 
-    if ((self = [super initWithFrame:frame])) {
+    if ((self = [super initWithFrame:frame]))
+    {
         inited = NO;
         pdfController = ipdfController;
         pdfController.pagebarDelegate = self;
 
-        sizes = [[RoboMainPagebarSizes alloc] init];
-        
+        flagMemoryIsOK = YES;
         maxOffsetForUpdate = 200;
         offsetCounter = 0;
         prevOffset = 0;
@@ -119,12 +79,15 @@
 
         document = object; // Retain the document object for our use
 
-        CGRect firstPageSize = [pdfController getFirstPdfPageRect];
-        previewPageWidth = sizes.thumbSmallHeight * firstPageSize.size.width / firstPageSize.size.height;
+
+        //previewPageWidth = THUMB_SMALL_HEIGHT * [RoboPDFModel instance].portrRect.size.width / [RoboPDFModel instance].portrRect.size.height;
+
+        previewPageWidth =  THUMB_SMALL_HEIGHT;
 
         int pages = [document.pageCount intValue];
 
-        barContentSize = CGSizeMake(pages * (previewPageWidth + sizes.thumbSmallGap) - sizes.thumbSmallGap * (-2 + pages / 2 + pages % 2), sizes.thumbSmallHeight + 2 * sizes.scrollSliderGap);
+
+        barContentSize = CGSizeMake(pages * (previewPageWidth + THUMB_SMALL_GAP) - THUMB_SMALL_GAP * (-2 + pages / 2 + pages % 2), THUMB_SMALL_HEIGHT + 2 * SCROLL_SLIDER_GAP);
 
         self.autoresizesSubviews = YES;
         self.userInteractionEnabled = YES;
@@ -134,7 +97,7 @@
         [self setBackgroundColor:UIColorFromRGBWithAlpha(0x333333)];
 
 
-        trackControl = [[RoboTrackControl alloc] initWithFrame:CGRectMake(0, sizes.topScrollGap - sizes.scrollSliderGap, self.frame.size.width, self.frame.size.height) page:pages previewPageWidth:previewPageWidth lastPage:pages]; // Track control view
+        trackControl = [[RoboTrackControl alloc] initWithFrame:CGRectMake(0, TOP_SCROLL_GAP - SCROLL_SLIDER_GAP, self.frame.size.width, self.frame.size.height) page:pages previewPageWidth:previewPageWidth lastPage:pages]; // Track control view
         [trackControl setContentSize:barContentSize];
         trackControl.showsVerticalScrollIndicator = NO;
         trackControl.showsHorizontalScrollIndicator = NO;
@@ -149,10 +112,13 @@
         [trackControl setDelegate:self];
 
 
+
+
+
         CGRect pagebarFrame = frame;
         pagebarFrame.origin.x = 0.0;
-        pagebarFrame.origin.y = self.frame.size.height - sizes.sliderHeight;
-        pagebarFrame.size.height = sizes.sliderHeight;
+        pagebarFrame.origin.y = self.frame.size.height -SLIDER_HEIGHT;
+        pagebarFrame.size.height = SLIDER_HEIGHT;
         pagebarSlider = [[UISlider alloc] initWithFrame:pagebarFrame];
         [pagebarSlider setThumbImage:[UIImage imageNamed:@"page-bg.png"] forState:UIControlStateNormal];
         [pagebarSlider setMinimumTrackImage:[UIImage imageNamed:@"progress_bar.png"] forState:UIControlStateNormal];
@@ -165,7 +131,7 @@
         [self addSubview:pagebarSlider];
 
 
-        CGRect numberRect = CGRectMake(0, self.frame.size.height - sizes.sliderHeight + (pagebarSlider.frame.size.height - sizes.pageNumberHeight) / 2, sizes.pageNumberWidth, sizes.pageNumberHeight);
+        CGRect numberRect = CGRectMake(0, self.frame.size.height - SLIDER_HEIGHT + (pagebarSlider.frame.size.height - PAGE_NUMBER_HEIGHT) / 2, PAGE_NUMBER_WIDTH, PAGE_NUMBER_HEIGHT);
         pageLabelView = [[UIView alloc] initWithFrame:numberRect]; // Page numbers view
         pageLabelView.autoresizesSubviews = NO;
         pageLabelView.userInteractionEnabled = NO;
@@ -174,7 +140,7 @@
         [self addSubview:pageLabelView];
 
 
-        CGRect textRect = CGRectMake(0, 0, sizes.pageNumberWidth, sizes.pageNumberHeight);
+        CGRect textRect = CGRectMake(0, 0, PAGE_NUMBER_WIDTH, PAGE_NUMBER_HEIGHT);
         pageLabel = [[UILabel alloc] initWithFrame:textRect]; // Page numbers label
         pageLabel.autoresizesSubviews = NO;
         pageLabel.autoresizingMask = UIViewAutoresizingNone;
@@ -189,17 +155,16 @@
         CGRect barContentRect = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, barContentSize.width, barContentSize.height);
         CGRect controlRect = CGRectInset(barContentRect, 4.0f, 0.0f);
 
-        CGFloat previewPageWidthWithGap = (previewPageWidth + sizes.thumbSmallGap);
+        CGFloat previewPageWidthWithGap = (previewPageWidth + THUMB_SMALL_GAP);
 
-        CGFloat heightDelta = (controlRect.size.height - sizes.thumbSmallHeight);
+        CGFloat heightDelta = (controlRect.size.height - THUMB_SMALL_HEIGHT);
 
-        float thumbY = (heightDelta / 2.0f);
-        float thumbX = 0; // Initial X, Y
+        float thumbY = (heightDelta / 2.0f); float thumbX = 0; // Initial X, Y
 
-        CGRect thumbRect = CGRectMake(thumbX, thumbY, previewPageWidth, sizes.thumbSmallHeight + 11);
+        CGRect thumbRect = CGRectMake(thumbX, thumbY, previewPageWidth, THUMB_SMALL_HEIGHT + 11);
         // pagebarImages = [[NSMutableArray alloc] init];
 
-        thumbRect.origin.x += sizes.thumbSmallGap;
+        thumbRect.origin.x += THUMB_SMALL_GAP;
         // first page
 
         // middle pages
@@ -218,7 +183,7 @@
             CGRect textFieldRect = thumbRect;
             textFieldRect.origin.y += textFieldRect.size.height;
             textFieldRect.size.height = 10.0f;
-            UITextField *currentPageTextField = [[UITextField alloc] initWithFrame:textFieldRect];
+            UITextField *currentPageTextField =  [[UITextField alloc] initWithFrame:textFieldRect];
             [currentPageTextField setTextColor:UIColorFromRGB(0xCCCCCC)];
             [currentPageTextField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
             [currentPageTextField setFont:[UIFont fontWithName:@"Helvetica" size:10]];
@@ -235,7 +200,7 @@
             }
             else {
                 //    [smallThumbView setImage: [UIImage imageNamed:@"page_left.png"]];
-                thumbRect.origin.x += previewPageWidthWithGap - sizes.thumbSmallGap;
+                thumbRect.origin.x += previewPageWidthWithGap - THUMB_SMALL_GAP;
                 [currentPageTextField setTextAlignment:NSTextAlignmentRight];
                 [currentPageTextField setText:[NSString stringWithFormat:@"%i    ", page]];
             }
@@ -247,7 +212,7 @@
             //  [pagesDict setValue:smallThumbView forKey:[NSString stringWithFormat:@"%d", page]];
 
             endPage = page;
-            ImagesFlags *imageFlags = [[ImagesFlags alloc] init];
+            ImagesFlags* imageFlags = [[ImagesFlags alloc] init];
             [imagesFlags addObject:imageFlags];
         }
 
@@ -257,6 +222,7 @@
         newFrame.origin.y += newFrame.size.height;
         [self setFrame:newFrame];
         self.alpha = 0.0f;
+
 
         [self start];
         /*   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];*/
@@ -270,26 +236,26 @@
 - (void)pagebarImageLoadingComplete:(UIImage *)pageBarImage page:(int)page {
     if (inited) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *key = [NSString stringWithFormat:@"%d", page];
+            NSString* key = [NSString stringWithFormat:@"%d", page];
             if ([renderedPages valueForKey:key] == nil) {
 
                 CGRect barContentRect = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, barContentSize.width, barContentSize.height);
                 CGRect controlRect = CGRectInset(barContentRect, 4.0f, 0.0f);
-                CGFloat heightDelta = (controlRect.size.height - sizes.thumbSmallHeight);
+                CGFloat heightDelta = (controlRect.size.height - THUMB_SMALL_HEIGHT);
 
                 float thumbY = (heightDelta / 2.0f);
-                float thumbX = (page - 1) * (previewPageWidth + sizes.thumbSmallGap) - sizes.thumbSmallGap * (-2 + page / 2 + page % 2);// Initial X, Y
+                float thumbX = (page - 1) * (previewPageWidth + THUMB_SMALL_GAP) - THUMB_SMALL_GAP * (-2 + page / 2 + page % 2);// Initial X, Y
 
-                CGRect thumbRect = CGRectMake(thumbX, thumbY, previewPageWidth, sizes.thumbSmallHeight);
+                CGRect thumbRect = CGRectMake(thumbX, thumbY, previewPageWidth, THUMB_SMALL_HEIGHT);
 
                 UIImageView *thumbView = [[UIImageView alloc] initWithFrame:thumbRect];
 
                 [thumbView setImage:pageBarImage];
 
                 [renderedPages setObject:thumbView forKey:key];
-                ((ImagesFlags *) imagesFlags[page - 1]).isRendered = YES;
+                ((ImagesFlags*)imagesFlags[page - 1]).isRendered = YES;
 
-                UIView *previousThumbView = [pagesDict objectForKey:key];
+                UIView* previousThumbView = [pagesDict objectForKey:key];
                 if (previousThumbView != nil) {
                     [pagesDict removeObjectForKey:key];
                     [pagesDict setObject:thumbView forKey:key];
@@ -300,7 +266,8 @@
                             [trackControl addSubview:thumbView];
                             [UIView animateWithDuration:0.3 delay:0.0
                                                 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
-                                             animations:^(void) {
+                                             animations:^(void)
+                                             {
                                                  thumbView.alpha = 1.0f;
                                              }
                                              completion:^(BOOL f) {
@@ -323,8 +290,9 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 
 
-    if ([keyPath isEqualToString:@"contentOffset"] && !sliderValueChanged) {
-        UIScrollView *trackScroll = (UIScrollView *) object;
+    if ([keyPath isEqualToString:@"contentOffset"] && !sliderValueChanged)
+    {
+        UIScrollView *trackScroll = (UIScrollView *)object;
 
         float ratio = 0.0;
         if (barContentSize.width != self.bounds.size.width)
@@ -345,16 +313,16 @@
         if (pagebarSlider.maximumValue != pagebarSlider.minimumValue)
             currentPage = pagebarOffset * (pagebarSlider.maximumValue / (pagebarSlider.maximumValue - pagebarSlider.minimumValue));
         if (currentPage > [document.pageCount floatValue])
-            currentPage = [document.pageCount floatValue];
+            currentPage =  [document.pageCount floatValue];
         //currentSliderPage = currentPage;
 
-        float sliderRatio = (pagebarOffset - pagebarSlider.minimumValue) / (pagebarSlider.maximumValue - pagebarSlider.minimumValue);
+        float sliderRatio =  (pagebarOffset - pagebarSlider.minimumValue) / (pagebarSlider.maximumValue - pagebarSlider.minimumValue);
         if (sliderRatio < 0)
             sliderRatio = 0;
         if (sliderRatio > 1)
             sliderRatio = 1;
 
-        CGRect pageLabelViewRect = CGRectMake((self.bounds.size.width - sizes.pageNumberWidth) * sliderRatio, self.frame.size.height - sizes.sliderHeight + (pagebarSlider.frame.size.height - sizes.pageNumberHeight) / 2, sizes.pageNumberWidth, sizes.pageNumberHeight);
+        CGRect pageLabelViewRect = CGRectMake((self.bounds.size.width - PAGE_NUMBER_WIDTH) * sliderRatio, self.frame.size.height - SLIDER_HEIGHT + (pagebarSlider.frame.size.height - PAGE_NUMBER_HEIGHT) / 2, PAGE_NUMBER_WIDTH, PAGE_NUMBER_HEIGHT);
         [pageLabelView setFrame:pageLabelViewRect];
 
         int labelPage = currentPage;
@@ -368,6 +336,7 @@
 
     }
 }
+
 
 
 - (void)sliderValueChanged:(UISlider *)sender {
@@ -387,14 +356,14 @@
 
     double ratio = 0;
     if (sender.maximumValue != sender.minimumValue)
-        ratio = (sender.value - sender.minimumValue) / (sender.maximumValue - sender.minimumValue);
+        ratio =  (sender.value - sender.minimumValue) / (sender.maximumValue - sender.minimumValue);
 
     if (ratio < 0)
         ratio = 0;
     if (ratio > 1)
         ratio = 1;
 
-    CGRect pageLabelViewRect = CGRectMake((self.bounds.size.width - sizes.pageNumberWidth) * ratio, self.frame.size.height - sizes.sliderHeight + (pagebarSlider.frame.size.height - sizes.pageNumberHeight) / 2, sizes.pageNumberWidth, sizes.pageNumberHeight);
+    CGRect pageLabelViewRect = CGRectMake((self.bounds.size.width - PAGE_NUMBER_WIDTH) * ratio, self.frame.size.height - SLIDER_HEIGHT + (pagebarSlider.frame.size.height - PAGE_NUMBER_HEIGHT) / 2, PAGE_NUMBER_WIDTH, PAGE_NUMBER_HEIGHT);
     [pageLabelView setFrame:pageLabelViewRect];
 
     [pageLabel setText:[NSString stringWithFormat:@"%i / %i", page, [document.pageCount intValue]]];
@@ -438,7 +407,7 @@
     trackRect.size.width = self.bounds.size.width;
     [trackControl setFrame:trackRect];
 
-    CGRect sliderFrame = pagebarSlider.frame;
+    CGRect sliderFrame =  pagebarSlider.frame;
     sliderFrame.size.width = self.bounds.size.width;
     [pagebarSlider setFrame:sliderFrame];
 
@@ -449,27 +418,32 @@
 
     [UIView animateWithDuration:0.1 delay:0.0
                         options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
-                     animations:^(void) {
+                     animations:^(void)
+                     {
                          CGRect newFrame = self.frame;
                          newFrame.origin.y += newFrame.size.height;
                          [self setFrame:newFrame];
                          self.alpha = 0.0f;
                      }
-                     completion:^(BOOL finished) {
+                     completion:^(BOOL finished)
+                     {
                      }
     ];
 
 }
 
 
+
+
 - (void)showPagebar {
-    offsetCounter = maxOffsetForUpdate;
+    offsetCounter= maxOffsetForUpdate;
     pagebarSlider.value = [document.currentPage floatValue];
     [self sliderValueChanged:pagebarSlider];
     [trackControl setStrokePage:[document.currentPage intValue]];
     [UIView animateWithDuration:0.1 delay:0.0
                         options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
-                     animations:^(void) {
+                     animations:^(void)
+                     {
                          self.alpha = 1.0f;
                          CGRect newFrame = self.frame;
                          newFrame.origin.y -= newFrame.size.height;
@@ -481,14 +455,15 @@
 }
 
 
+
 - (void)trackViewTouchUpInside:(UITapGestureRecognizer *)recognizer {
 
-    if (recognizer.state == UIGestureRecognizerStateRecognized) {
+    if(recognizer.state == UIGestureRecognizerStateRecognized) {
         CGPoint point = [recognizer locationInView:recognizer.view];
 
         int page = 0;
 
-        while (point.x > (page * (previewPageWidth + sizes.thumbSmallGap) - sizes.thumbSmallGap * (-1 + page / 2 + page % 2)))
+        while (point.x > (page * (previewPageWidth + THUMB_SMALL_GAP) - THUMB_SMALL_GAP * (-1 + page / 2 + page % 2)))
             page++;
 
         if (page < 1)
@@ -508,17 +483,16 @@
     offsetCounter += fabsf(scrollView.contentOffset.x - prevOffset);
     prevOffset = scrollView.contentOffset.x;
     if (offsetCounter > maxOffsetForUpdate) {
-        [self updateFirstAndLastPagesOnScreen2:scrollView.contentOffset.x withRemoving:NO];
+        [self updateFirstAndLastPagesOnScreen2: scrollView.contentOffset.x withRemoving:NO];
         offsetCounter = 0;
     }
 }
 
 
-- (void)updateFirstAndLastPagesOnScreen2:(float)offset withRemoving:(BOOL)withRemoving {
+- (void) updateFirstAndLastPagesOnScreen2: (float) offset withRemoving: (BOOL) withRemoving {
     if (inited) {
-#warning fix the number 1024 1
-        int newBeginPage = floor((offset - previewPageWidth) / (sizes.thumbSmallGap / 2 + previewPageWidth)) + 1;
-        int newEndPage = floor((offset + CGRectGetWidth(self.frame)) / (sizes.thumbSmallGap / 2 + previewPageWidth)) + 2;
+        int newBeginPage = floor((offset - previewPageWidth) / (THUMB_SMALL_GAP / 2 + previewPageWidth)) + 1;
+        int newEndPage = floor((offset + 1024) / (THUMB_SMALL_GAP / 2 + previewPageWidth)) + 2;
 
         newBeginPage -= currentWindowSize;
         newEndPage += currentWindowSize;
@@ -536,52 +510,52 @@
             //    if (withRemoving) {
             for (i = 1; i < beginPage; i++) {
                 //disappear
-                [self deleteSmallPageView:i];
+                [self deleteSmallPageView: i];
             }
             for (i = endPage + 1; i <= [document.pageCount intValue]; i++) {
-                [self deleteSmallPageView:i];
+                [self deleteSmallPageView: i];
             }
             //    }
             for (i = beginPage; i <= endPage; i++) {
-                [self initSmallPageView:i];
+                [self initSmallPageView: i];
             }
         }
     }
 
 }
 
-- (void)initSmallPageView:(int)page {
-    NSString *key = [NSString stringWithFormat:@"%d", page];
+- (void) initSmallPageView: (int) page {
+    NSString* key = [NSString stringWithFormat:@"%d", page];
 
-    UIImageView *smallThumbView = [pagesDict valueForKey:key];
+    UIImageView* smallThumbView = [pagesDict valueForKey:key];
     if (smallThumbView == nil) {
         if ([renderedPages objectForKey:key] != nil) {
             smallThumbView = [renderedPages objectForKey:key];
-            ((ImagesFlags *) imagesFlags[page - 1]).onPageBar = YES;
+            ((ImagesFlags*)imagesFlags[page - 1]).onPageBar = YES;
         } else {
             CGRect barContentRect = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, barContentSize.width, barContentSize.height);
             CGRect controlRect = CGRectInset(barContentRect, 4.0f, 0.0f);
-            CGFloat heightDelta = (controlRect.size.height - sizes.thumbSmallHeight);
+            CGFloat heightDelta = (controlRect.size.height - THUMB_SMALL_HEIGHT);
 
             float thumbY = (heightDelta / 2.0f);
-            float thumbX = (page - 1) * (previewPageWidth + sizes.thumbSmallGap) - sizes.thumbSmallGap * (-2 + page / 2 + page % 2);// Initial X, Y
+            float thumbX = (page - 1) * (previewPageWidth + THUMB_SMALL_GAP) - THUMB_SMALL_GAP * (-2 + page / 2 + page % 2);// Initial X, Y
 
-            CGRect thumbRect = CGRectMake(thumbX, thumbY, previewPageWidth, sizes.thumbSmallHeight + 11);
+            CGRect thumbRect = CGRectMake(thumbX, thumbY, previewPageWidth, THUMB_SMALL_HEIGHT + 11);
 
             // We need to create a new small thumb view for the page number
 
             smallThumbView = [[UIImageView alloc] initWithFrame:thumbRect];
             if (page % 2) {
-                //smallThumbText = [[UITextField alloc] initWithFrame:CGRectMake(thumbRect.origin.x, thumbSmallHeight, 20, 20)];
-                [smallThumbView setImage:[UIImage imageNamed:@"page_right"]];
+                //smallThumbText = [[UITextField alloc] initWithFrame:CGRectMake(thumbRect.origin.x, THUMB_SMALL_HEIGHT, 20, 20)];
+                [smallThumbView setImage:[UIImage imageNamed: @"page_right"]];
             }
             else {
-                [smallThumbView setImage:[UIImage imageNamed:@"page_left"]];
+                [smallThumbView setImage:[UIImage imageNamed: @"page_left"]];
             }
             [pdfController addGettingPageBarImageToQueue:page];
         }
         [pagesDict setValue:smallThumbView forKey:key];
-        ((ImagesFlags *) imagesFlags[page - 1]).onPageBar = YES;
+        ((ImagesFlags*)imagesFlags[page - 1]).onPageBar = YES;
     } else {
         if ([renderedPages objectForKey:key] == nil) {
             [pdfController addGettingPageBarImageToQueue:page];
@@ -590,66 +564,64 @@
     if ([smallThumbView superview] == nil)
         [trackControl addSubview:smallThumbView];
 }
-
-- (void)deleteSmallPageView:(int)i {
-    NSString *key = [NSString stringWithFormat:@"%d", i];
-    UIView *previousThumbView = [pagesDict objectForKey:key];
+- (void) deleteSmallPageView: (int) i {
+    NSString* key = [NSString stringWithFormat:@"%d", i];
+    UIView* previousThumbView = [pagesDict objectForKey:key];
     if (previousThumbView != nil) {
-        ((ImagesFlags *) imagesFlags[i - 1]).onPageBar = NO;
+        ((ImagesFlags*)imagesFlags[i - 1]).onPageBar = NO;
         [previousThumbView removeFromSuperview];
         [pagesDict removeObjectForKey:key];
     }
-    UIImageView *renderedView = [renderedPages objectForKey:key];
+    UIImageView* renderedView = [renderedPages objectForKey:key];
     if (renderedView != nil) {
-        ((ImagesFlags *) imagesFlags[i - 1]).isRendered = NO;
+        ((ImagesFlags*)imagesFlags[i - 1]).isRendered = NO;
         [renderedView removeFromSuperview];
         [renderedPages removeObjectForKey:key];
     }
 }
-
-- (void)clearImageCache {
+- (void) clearImageCache {
     [self updateFirstAndLastPagesOnScreen2:trackControl.contentOffset.x withRemoving:YES];
     for (int i = 1; i < beginPage; i++) {
-        NSString *key = [NSString stringWithFormat:@"%d", i];
-        UIImageView *previousThumbView = [pagesDict objectForKey:key];
+        NSString* key = [NSString stringWithFormat:@"%d", i];
+        UIImageView* previousThumbView = [pagesDict objectForKey:key];
         if (previousThumbView != nil) {
-            ((ImagesFlags *) imagesFlags[i - 1]).onPageBar = NO;
+            ((ImagesFlags*)imagesFlags[i - 1]).onPageBar = NO;
             [previousThumbView removeFromSuperview];
             [pagesDict removeObjectForKey:key];
         }
-        UIImageView *renderedView = [renderedPages objectForKey:key];
+        UIImageView* renderedView = [renderedPages objectForKey:key];
         if (renderedView != nil) {
-            ((ImagesFlags *) imagesFlags[i - 1]).isRendered = NO;
+            ((ImagesFlags*)imagesFlags[i - 1]).isRendered = NO;
             [renderedView removeFromSuperview];
             [renderedPages removeObjectForKey:key];
         }
     }
     for (int i = endPage + 1; i <= [document.pageCount intValue]; i++) {
-        NSString *key = [NSString stringWithFormat:@"%d", i];
-        UIView *previousThumbView = [pagesDict objectForKey:key];
+        NSString* key = [NSString stringWithFormat:@"%d", i];
+        UIView* previousThumbView = [pagesDict objectForKey:key];
         if (previousThumbView != nil) {
-            ((ImagesFlags *) imagesFlags[i - 1]).onPageBar = NO;
+            ((ImagesFlags*)imagesFlags[i - 1]).onPageBar = NO;
             [previousThumbView removeFromSuperview];
             [pagesDict removeObjectForKey:key];
         }
-        UIImageView *renderedView = [renderedPages objectForKey:key];
+        UIImageView* renderedView = [renderedPages objectForKey:key];
         if (renderedView != nil) {
-            ((ImagesFlags *) imagesFlags[i - 1]).isRendered = NO;
+            ((ImagesFlags*)imagesFlags[i - 1]).isRendered = NO;
             [renderedView removeFromSuperview];
             [renderedPages removeObjectForKey:key];
         }
     }
 }
 
-- (BOOL)isNeedLoad:(int)i {
+- (BOOL) isNeedLoad: (int) i {
     /*  NSString* key = [NSString stringWithFormat:@"%d", i];
      
      if ([[renderedPages allKeys] containsObject:key]) return NO;// already rendered
      if ([[pagesDict allKeys] containsObject:key]) return YES;// not rendered and on pagebar
      if ([self allPagesOnScreenRendered]) return YES;// not rendered and not on pagebar, but all important pages loaded*/
 
-    if (((ImagesFlags *) imagesFlags[i - 1]).isRendered) return NO;// already rendered
-    if (((ImagesFlags *) imagesFlags[i - 1]).onPageBar) return YES;// not rendered and on pagebar
+    if (((ImagesFlags*) imagesFlags[i - 1]).isRendered) return NO;// already rendered
+    if (((ImagesFlags*) imagesFlags[i - 1]).onPageBar) return YES;// not rendered and on pagebar
 
     return NO;
     //  if ([self allPagesOnScreenRendered] && flagMemoryIsOK) return YES;// not rendered and not on pagebar, all important pages loaded, and memOK
@@ -657,37 +629,37 @@
     //  return NO;// not rendered and not on pagebar and low memory
 }
 
-- (BOOL)allPagesOnScreenRendered {
+- (BOOL) allPagesOnScreenRendered {
 
     for (int i = MAX(beginPage, 1); i <= endPage; i++) {
-        if (!((ImagesFlags *) imagesFlags[i - 1]).isRendered) return NO;
+        if (!((ImagesFlags*) imagesFlags[i - 1]).isRendered) return NO;
     }
 
     return YES;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning {
+    flagMemoryIsOK = NO;
     [self clearImageCache];
 }
 
-- (BOOL)onScreen:(int)i {
-
-    int onScreenBeginPage = floor((trackControl.contentOffset.x - previewPageWidth) / (sizes.thumbSmallGap / 2 + previewPageWidth)) + 1;
-    int onScreenEndPage = floor((trackControl.contentOffset.x + CGRectGetWidth(self.frame)) / (sizes.thumbSmallGap / 2 + previewPageWidth)) + 2;
+- (BOOL) onScreen: (int) i {
+    int onScreenBeginPage = floor((trackControl.contentOffset.x - previewPageWidth) / (THUMB_SMALL_GAP / 2 + previewPageWidth)) + 1;
+    int onScreenEndPage = floor((trackControl.contentOffset.x + 1024) / (THUMB_SMALL_GAP / 2 + previewPageWidth)) + 2;
 
     if (onScreenBeginPage <= i <= onScreenEndPage) return YES;
     else return NO;
 }
 
-- (void)reset {
+- (void) reset {
     inited = NO;
     beginPage = 0;
     endPage = 0;
     for (int i = 1; i <= [document.pageCount intValue]; i++) {
-        NSString *key = [NSString stringWithFormat:@"%d", i];
-        UIImageView *renderedView = [renderedPages objectForKey:key];
+        NSString* key = [NSString stringWithFormat:@"%d", i];
+        UIImageView* renderedView = [renderedPages objectForKey:key];
         if (renderedView != nil) {
-            ((ImagesFlags *) imagesFlags[i - 1]).isRendered = NO;
+            ((ImagesFlags*)imagesFlags[i - 1]).isRendered = NO;
             [renderedView removeFromSuperview];
             [renderedPages removeObjectForKey:key];
         }
@@ -695,7 +667,7 @@
     }
 }
 
-- (void)start {
+- (void) start {
     inited = YES;
     [self updateFirstAndLastPagesOnScreen2:trackControl.contentOffset.x withRemoving:YES];
 }
@@ -703,25 +675,23 @@
 @end
 
 
+
 @implementation RoboTrackControl
-{
-    RoboMainPagebarSizes *sizes;
-}
+
 @synthesize value = _value;
 
 
 - (id)initWithFrame:(CGRect)frame page:(int)page previewPageWidth:(float)previewWidth lastPage:(int)lPage {
 
 
-    if ((self = [super initWithFrame:frame])) {
+    if ((self = [super initWithFrame:frame]))
+    {
         self.autoresizesSubviews = NO;
         self.userInteractionEnabled = YES;
         self.contentMode = UIViewContentModeRedraw;
         self.autoresizingMask = UIViewAutoresizingNone;
         self.backgroundColor = [UIColor clearColor];
 
-        sizes = [[RoboMainPagebarSizes alloc] init];
-        
         previewPageWidth = previewWidth;
         lastPage = lPage;
 
@@ -743,12 +713,12 @@
     float pageOffset;
     CGRect orangeOffset;
     if (page == 1 || (page == lastPage && !(lastPage % 2))) {
-        pageOffset = page * (previewPageWidth + sizes.thumbSmallGap) - sizes.thumbSmallGap * (-1 + page / 2 + page % 2);
+        pageOffset = page * (previewPageWidth + THUMB_SMALL_GAP) - THUMB_SMALL_GAP * (-1 + page / 2 + page % 2);
         // first or last page and odd number of pages in pdf
         if (page == 1)
-            orangeOffset = CGRectMake(sizes.thumbSmallGap - 6, 0, previewPageWidth + 12, sizes.thumbSmallHeight + 8);
+            orangeOffset = CGRectMake(THUMB_SMALL_GAP - 6, 0, previewPageWidth + 12, THUMB_SMALL_HEIGHT + 8);
         else
-            orangeOffset = CGRectMake(pageOffset - previewPageWidth - 6, 0, previewPageWidth + 12, sizes.thumbSmallHeight + 8);
+            orangeOffset = CGRectMake(pageOffset - previewPageWidth - 6, 0, previewPageWidth + 12, THUMB_SMALL_HEIGHT + 8);
         [strokeTrackImage setImage:[UIImage imageNamed:@"Stroke2px_single.png"]];
         [strokeTrackImage setFrame:orangeOffset];
 
@@ -756,12 +726,12 @@
     else {
         // not first and not last
         if (page % 2) {
-            pageOffset = page * (previewPageWidth + sizes.thumbSmallGap) - sizes.thumbSmallGap * (-1 + page / 2 + page % 2);
-            orangeOffset = CGRectMake(pageOffset - 2 * previewPageWidth - 6, 0, previewPageWidth * 2 + 12, sizes.thumbSmallHeight + 8);
+            pageOffset = page * (previewPageWidth + THUMB_SMALL_GAP) - THUMB_SMALL_GAP * (-1 + page / 2 + page % 2);
+            orangeOffset = CGRectMake(pageOffset - 2 * previewPageWidth - 6, 0, previewPageWidth * 2 + 12, THUMB_SMALL_HEIGHT + 8);
             [strokeTrackImage setImage:[UIImage imageNamed:@"Stroke2px.png"]];
             [strokeTrackImage setFrame:orangeOffset];
         }
-        else [self setStrokePage:(page + 1)];
+        else [self setStrokePage:(page+1)];
 
     }
 }
@@ -770,6 +740,5 @@
 
 
 }
-
 
 @end

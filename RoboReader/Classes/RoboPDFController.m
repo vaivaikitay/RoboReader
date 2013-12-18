@@ -17,83 +17,85 @@
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.NNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
 #import "RoboPDFController.h"
 #import "PDFPageConverter.h"
 #import "CGPDFDocument.h"
+#import "PDFPageRenderer.h"
 #import "RoboConstants.h"
+#import "RoboPDFModel.h"
 
 
-#define MAX_DPI 300.0f
 
 @implementation RoboPDFController
 
-- (id)initWithDocument:(RoboDocument *)document {
+- (id)initWithDocument:(RoboDocument *)document  {
 
-#ifdef HARDCORX
-	NSLog(@"%s", __FUNCTION__);
-#endif
     if (self = [super init]) {
 
-        thePDFDocRef = CGPDFDocumentCreateX((__bridge CFURLRef) document.fileURL, document.password);
+        thePDFDocRef = CGPDFDocumentCreateX((__bridge CFURLRef)document.fileURL, document.password);
 
         pdfFileURL = document.fileURL;
         pdfPassword = document.password;
 
-        _resetPdfDoc = NO;
+        isRetina = YES;
         isRetina = [RoboConstants instance].retinaDisplay;
 
-        viewQueue = [[NSOperationQueue alloc] init];
-        [viewQueue setMaxConcurrentOperationCount:8];
-        
-        opDict = [[NSMutableDictionary alloc] init];
+        _viewQueue = [[NSOperationQueue alloc] init];
+        [_viewQueue setMaxConcurrentOperationCount:8];
+        _opDict = [[NSMutableDictionary alloc] init];
         pagesQueue = [[NSOperationQueue alloc] init];
-        [pagesQueue setMaxConcurrentOperationCount:2];
+        [pagesQueue setMaxConcurrentOperationCount:1];
         pagebarQueue = [[NSOperationQueue alloc] init];
         [pagebarQueue setMaxConcurrentOperationCount:2];
+                
+        _loadedPages = [[NSMutableSet alloc] init];
 
-        loadedPages = [[NSMutableSet alloc] init];
-        _didRotate = NO;
-        running = YES;
+        resetPdfDoc = NO;
+        isRunning = YES;
+
+        pagesDict = [[NSMutableDictionary alloc] init];
 
     }
     return self;
 }
 
-- (void)setPdfPage:(CGPDFPageRef)newPage {
-    if (onePDFPageRef != newPage) {
-        CGPDFPageRelease(onePDFPageRef);
-        onePDFPageRef = CGPDFPageRetain(newPage);
+
+
+
+
+/*
+- (void)checkIfResetPdfAndSetPage:(int)pageNum {
+    @synchronized(self) {
+
+
+            CGPDFPageRelease(onePDFPageRef);
+            onePDFPageRef = CGPDFDocumentGetPage(thePDFDocRef, pageNum);
+
+
     }
+
 }
+ */
 
-- (CGRect)getFirstPdfPageRect {
+- (void)getPageBarImages:(int)pages{
 
-    @synchronized (self) {
-        if (running) {
-            if (_resetPdfDoc) {
-                CGPDFDocumentRelease(thePDFDocRef);
-                thePDFDocRef = CGPDFDocumentCreateX((__bridge CFURLRef) (pdfFileURL), pdfPassword);
-                _resetPdfDoc = NO;
-            }
-            [self setPdfPage:CGPDFDocumentGetPage(thePDFDocRef, 1)];
-            if (onePDFPageRef != NULL) {
+    NSMutableArray *opArray = [[NSMutableArray alloc] init];
+    for (int i = 1; i <= pages; i++) {
 
-                CGRect pageRect = CGPDFPageGetBoxRect(onePDFPageRef, kCGPDFCropBox);
+        NSOperation *op = [NSBlockOperation blockOperationWithBlock:^{
 
-                return pageRect;
-            }
-            else {
+            [self getPageBarImageIfNeeded:i];//Aydar
 
-                NSLog(@"Error while loading pdf page number: %i", 1);
+        }];
+        [op setQueuePriority:NSOperationQueuePriorityVeryLow];
+        [opArray addObject:op];
 
-            }
-        }
     }
 
-
-    return CGRectZero;
+    [pagebarQueue addOperations:opArray waitUntilFinished:NO];
 
 }
 
@@ -108,52 +110,91 @@
 }
 
 - (void)getPageBarImageIfNeeded:(int)i {
-#ifdef HARDCORX
-	NSLog(@"%s", __FUNCTION__);
-#endif
 
-    if ([self.pagebarDelegate isNeedLoad:i]) {
-        @synchronized (self) {
-            if (running) {
-                if (_resetPdfDoc) {
-                    CGPDFDocumentRelease(thePDFDocRef);
-                    thePDFDocRef = CGPDFDocumentCreateX((__bridge CFURLRef) (pdfFileURL), pdfPassword);
-                    _resetPdfDoc = NO;
-                }
-                [self setPdfPage:CGPDFDocumentGetPage(thePDFDocRef, i)];
-                if (onePDFPageRef != NULL) {
 
-                    UIImage *pagebarImage;
-                    if (_isSmall) {
-                        if (isRetina)
-                            pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:150.0f];
-                        else
-                            pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:150.0f];
-                    } else {
-                        if (isRetina)
-                            pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:20.0f];
-                        else
-                            pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:14.0f];
-                    }
-                    if (running)
-                        [_pagebarDelegate pagebarImageLoadingComplete:pagebarImage page:i];
-                }
-                else {
+    if ([self.pagebarDelegate isNeedLoad: i]) {
 
-                    NSLog(@"Error while loading pdf page number: %i", i);
+            CGPDFPageRef onePDFPageRef = [self setPdfPage:i];
 
-                }
+            if (onePDFPageRef) {
+
+                UIImage *pagebarImage;
+
+                if (isRetina)
+                    pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:20.0f];
+                else
+                    pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:14.0f];
+
+            [_pagebarDelegate pagebarImageLoadingComplete:pagebarImage page:i];
+
+
+
+
             }
-        }
+            else {
+
+                NSLog(@"Error while loading pdf page number: %i", i);
+
+            }
     }
+}
+
+
+- (CGPDFPageRef)setPdfPage:(int)page {
+
+    @synchronized (self) {
+
+        if (!isRunning)
+            return NULL;
+
+
+        if (resetPdfDoc)
+            [self performSelectorOnMainThread:@selector(releasePdfPointer) withObject:nil waitUntilDone:YES];
+
+        PDFPageRefObject *onePageRef = pagesDict[@(page)];
+
+        if (onePageRef == nil)
+            onePageRef = [[PDFPageRefObject alloc] init];
+
+        onePageRef.pageRef =  CGPDFPageRetain(CGPDFDocumentGetPage(thePDFDocRef, page));
+
+        return onePageRef.pageRef;
+    }
+
+
+}
+
+
+
+
+- (void)releasePdfPointer {
+
+    NSLog(@"release world");
+
+    [pagesDict removeAllObjects];
+
+    CGPDFDocumentRelease(thePDFDocRef);
+
+    thePDFDocRef = nil;
+
+    thePDFDocRef = CGPDFDocumentCreateX((__bridge CFURLRef)pdfFileURL, pdfPassword);
+
+    resetPdfDoc = NO;
+
+}
+
+- (void)cleanMemory {
+
+    resetPdfDoc = YES;
+
 }
 
 - (void)stopMashina {
 
-    running = NO;
+    isRunning = NO;
 
-    [viewQueue cancelAllOperations];
-    [viewQueue waitUntilAllOperationsAreFinished];
+    [_viewQueue cancelAllOperations];
+    [_viewQueue waitUntilAllOperationsAreFinished];
 
     [pagesQueue cancelAllOperations];
     [pagesQueue waitUntilAllOperationsAreFinished];
@@ -161,255 +202,242 @@
     [pagebarQueue cancelAllOperations];
     [pagebarQueue waitUntilAllOperationsAreFinished];
 
-    CGPDFPageRelease(onePDFPageRef);
     CGPDFDocumentRelease(thePDFDocRef);
 
-    onePDFPageRef = nil;
     thePDFDocRef = nil;
 
 }
 
 
 - (void)getPagesContentFromPage:(int)minValue toPage:(int)maxVal isLands:(BOOL)isLands {
-    
-    [pagesQueue cancelAllOperations];
 
-    NSOperation *pagesOp = [NSBlockOperation blockOperationWithBlock:^{
+        [pagesQueue cancelAllOperations];
+        
+        if (minValue < 1)
+            minValue = 1;
+        
+        NSOperation *pagesOp = [NSBlockOperation blockOperationWithBlock:^{
 
+            for (int page = minValue; page <= maxVal; page++) {
+                
+                NSString *key = [NSString stringWithFormat:@"%i", page];
+                
+                if (![_loadedPages containsObject:key]) {
+                    
+                    [_loadedPages addObject:key];
 
-        if (_didRotate) {
-            _didRotate = NO;
-            [viewQueue cancelAllOperations];
-            [loadedPages removeAllObjects];
-        }
+                    NSOperation *op = [NSBlockOperation blockOperationWithBlock:^{
+                        [self getOnePageContent:page isLands:isLands];
+                    }];
 
-        int maxValue = maxVal;
+                    if ((isLands &&  page == _currentPage+1) ||  page == _currentPage)
+                        [op setQueuePriority:NSOperationQueuePriorityHigh];
+                    else
+                        [op setQueuePriority:NSOperationQueuePriorityNormal];
 
-        if (isLands) {
-            for (NSNumber *key in [loadedPages allObjects]) {
+                    [_viewQueue addOperation:op];
 
-
-                NSOperation *renderOperation = opDict[key];
-
-                if ([key intValue] == _currentPage || [key intValue] == _currentPage + 1) {
-
-                    [renderOperation setQueuePriority:NSOperationQueuePriorityVeryHigh];
-
-                }
-                else if ((_currentPage - [key intValue] >= 3) || ([key intValue] - _currentPage >= 4)) {
-
-                    [renderOperation cancel];
-                    [loadedPages removeObject:key];
-
-                }
-                else {
-                    [renderOperation setQueuePriority:NSOperationQueuePriorityNormal];
+                    _opDict[key] = op;
                 }
             }
+            
+        }];
+        
+        [pagesOp setQueuePriority:NSOperationQueuePriorityVeryHigh];
+        [pagesQueue addOperation:pagesOp];
+}
+
+
+- (CGRect)getFirstPdfPageRect {
+
+
+
+
+        CGPDFPageRef onePDFPageRef = [self setPdfPage:1];
+
+        if (onePDFPageRef) {
+            
+            // pdfPageRect.origin.x = 0;
+            // pdfPageRect.origin.y = 0;
+
+
+            return CGPDFPageGetBoxRect(onePDFPageRef, kCGPDFCropBox);
+            
         }
         else {
-            for (NSNumber *key in [loadedPages allObjects]) {
-                NSOperation *renderOperation = opDict[key];
-                if ([key intValue] == _currentPage) {
-                    [renderOperation setQueuePriority:NSOperationQueuePriorityVeryHigh];
-                }
-                else if (abs([key intValue] - _currentPage) >= 2) {
-                    [loadedPages removeObject:key];
-                    [renderOperation cancel];
-                }
-                else {
-                    [renderOperation setQueuePriority:NSOperationQueuePriorityNormal];
-                }
-            }
+            
+            NSLog(@"Error while loading pdf page number: %i", 1);
+            //  return nil;
+            
         }
-        if (isLands)
-            maxValue++;
-        for (int page = minValue; page <= maxValue; page++) {
+    
 
-            NSString *key = [NSString stringWithFormat:@"%i", page];
-            if (![loadedPages containsObject:key]) {
-                [loadedPages addObject:key];
-                NSOperation *op = [NSBlockOperation blockOperationWithBlock:^{
-                    [self getOnePageContent:page isLands:isLands];
-                }];
-                if ((isLands && page == _currentPage + 1) || page == _currentPage)
-                    [op setQueuePriority:NSOperationQueuePriorityVeryHigh];
-                else
-                    [op setQueuePriority:NSOperationQueuePriorityNormal];
-                [viewQueue addOperation:op];
-                opDict[key] = op;
-            }
-        }
-    }];
-    [pagesOp setQueuePriority:NSOperationQueuePriorityHigh];
-    [pagesQueue addOperation:pagesOp];
+    
+    return CGRectZero;
 
 }
 
-- (void)getOnePageContent:(int)page isLands:(int)isLands {
-#ifdef HARDCORX
-	NSLog(@"%s", __FUNCTION__);
-#endif
+- (void)getOnePageContent:(int)page isLands:(BOOL)isLands {
+    
+    if ( (isLands && ((page - _currentPage) <= 3 || (_currentPage - page) >= 2)) || (!isLands && abs(page - _currentPage) <= 1)) {
+        
+        BOOL rightSide;
 
-    @synchronized (self) {
-        if (running) {
+        rightSide = isLands ? page % 2 : NO;
 
-            BOOL rightSide;
+        CGPDFPageRef onePDFPageRef=  [self setPdfPage:page];
+
+        if (onePDFPageRef) {
+
+            UIImage *pagebarImage;
+
             if (isLands) {
-                if (page >= 1)
-                    rightSide = page % 2;
-                else
-                    rightSide = NO;
+                pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:isRetina ? MAX_DPI * 0.5 : MAX_DPI * 0.25];
             }
             else {
-                rightSide = NO;
+                pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:isRetina ? MAX_DPI * 0.6 : MAX_DPI * 0.3];
             }
 
-            if (_resetPdfDoc) {
-                CGPDFDocumentRelease(thePDFDocRef);
-                thePDFDocRef = CGPDFDocumentCreateX((__bridge CFURLRef) (pdfFileURL), pdfPassword);
-                _resetPdfDoc = NO;
+            if ( (isLands && ((page - _currentPage) <= 3 || (_currentPage - page) >= 2)) || (!isLands && abs(page - _currentPage) <= 1))  {
+
+                [_viewDelegate pageContentLoadingComplete:page pageBarImage:pagebarImage rightSide:rightSide];
+
+                [self getZoomedPageContent:page isLands:isLands];
 
             }
-            [self setPdfPage:CGPDFDocumentGetPage(thePDFDocRef, page)]; // Get page
-            if (onePDFPageRef != NULL) { // Check for non-NULL CGPDFPageRef
-                UIImage *pagebarImage;
-                if (isLands) {
-                    if (isRetina) {
-                        pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:MAX_DPI * 0.5];
-                    }
-                    else {
-                        pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:MAX_DPI * 0.25];
-                    }
-                }
-                else {
-                    if (isRetina) {
-                        pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:MAX_DPI * 0.6];
-                    }
-                    else {
-                        pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:MAX_DPI * 0.3];
-                    }
-                }
 
-                if (running)
-                    [_viewDelegate pageContentLoadingComplete:page pageBarImage:pagebarImage rightSide:rightSide zoomed:NO];
 
-            }
-            else {
-                NSLog(@"Error while loading pdf page number: %i", page);
-                //  return nil;
-            }
+
+
         }
+        else {
+
+            NSLog(@"Error while loading pdf page number: %i", page);
+            //  return nil;
+
+        }
+
     }
+    
+    
 }
 
 - (void)getZoomedPageContent:(int)page isLands:(int)isLands {
-#ifdef HARDCORX
-	NSLog(@"%s", __FUNCTION__);
-#endif
 
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
 
-        BOOL rightSide;
-        if (isLands) {
-            if (page >= 1)
-                rightSide = page % 2;
-            else
-                rightSide = NO;
-        }
-        else {
-            rightSide = NO;
-        }
 
-        if ((isLands && ((page - _currentPage) <= 3 || (_currentPage - page) >= 2)) || (!isLands && abs(page - _currentPage) <= 1)) {
-            @synchronized (self) {
-                if (_resetPdfDoc) {
-                    CGPDFDocumentRelease(thePDFDocRef);
-                    thePDFDocRef = CGPDFDocumentCreateX((__bridge CFURLRef) (pdfFileURL), pdfPassword);
-                    _resetPdfDoc = NO;
+        if (page >= 1  &&  ( (isLands && ((page - _currentPage) <= 3 || (_currentPage - page) >= 2)) || (!isLands && abs(page - _currentPage) <= 1)) ) {
 
-                }
+            BOOL rightSide;
 
-                [self setPdfPage:CGPDFDocumentGetPage(thePDFDocRef, page)];
-                if (onePDFPageRef != NULL) {
+            rightSide = isLands ? page % 2 : NO;
 
-                    UIImage *pagebarImage;
 
-                    if (isLands) {
-                        if (isRetina) {
-                            pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:MAX_DPI * 0.8];
-                        }
-                        else {
-                            pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:MAX_DPI * 0.5];
-                        }
-                    }
-                    else {
-                        if (isRetina) {
-                            pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:MAX_DPI];
-                        }
-                        else {
-                            pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:MAX_DPI * 0.6];
-                        }
-                    }
 
-                    if ((isLands && ((page - _currentPage) <= 3 || (_currentPage - page) >= 2)) || (!isLands && abs(page - _currentPage) <= 1)) if (running)
-                        [_viewDelegate pageContentLoadingComplete:page pageBarImage:pagebarImage rightSide:rightSide zoomed:YES];
+            CGPDFPageRef onePDFPageRef=  [self setPdfPage:page];
 
-                }
-                else {
-                    NSLog(@"Error while loading pdf page number: %i", page);
-                    //  return nil;
-                }
+            if (onePDFPageRef) {
+
+                CGRect pageRect = CGPDFPageGetBoxRect(onePDFPageRef, kCGPDFCropBox);
+                CGRect pageResizedRect = [RoboPDFModel getPdfRectsWithSize:pageRect.size isLands:isLands];
+
+                float scale =  pageResizedRect.size.height / pageRect.size.height;
+
+                RoboPDFView *pdfView = [[RoboPDFView alloc] initWithFrame:pageResizedRect onePDFPageRef:onePDFPageRef scale:scale];
+                pdfView.backgroundColor = [UIColor clearColor];
+
+                if (( (isLands && ((page - _currentPage) <= 3 || (_currentPage - page) >= 2)) || (!isLands && abs(page - _currentPage) <= 1)) )
+                    [_viewDelegate pdfViewLoadingComplete:page pdfView:pdfView rightSide:rightSide];
 
             }
+            else {
+
+                NSLog(@"Error while loading pdf page number: %i", page);
+                //  return nil;
+
+            }
+
         }
+
     });
 
-}
+    //[op setQueuePriority:NSOperationQueuePriorityVeryHigh];
+   // [_viewQueue addOperation:op];
 
-/*
-- (void)renderPage:(int)page withScale:(float)scale {
-#ifdef HARDCORX
-	NSLog(@"%s", __FUNCTION__);
-#endif
-    CGPDFPageRef onePDFPageRef = CGPDFDocumentGetPage([RoboPDFDocRef instance:nil].thePDFDocRef, page);
-    [PDFPageRenderer renderPage:onePDFPageRef inContext:UIGraphicsGetCurrentContext()  atPoint:CGPointMake(0, 0) withZoom:scale*100.0f];
 }
 
 
-- (UIImage *)getPageContentImmediately:(int)page {
-#ifdef HARDCORX
-	NSLog(@"%s", __FUNCTION__);
-#endif
-    CGPDFPageRef onePDFPageRef = CGPDFDocumentGetPage([RoboPDFDocRef instance:nil].thePDFDocRef, page); // Get page
-    if (onePDFPageRef != NULL) { // Check for non-NULL CGPDFPageRef
-        UIImage *pagebarImage = [PDFPageConverter convertPDFPageToImage:onePDFPageRef withResolution:500];
-       
+@end
+
+
+@implementation RoboPDFView
+
+- (id)initWithFrame:(CGRect)frame onePDFPageRef:(CGPDFPageRef)onePDFPageRef scale:(CGFloat)scale
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+
+        _scale = scale;
+        _onePDFPageRef = onePDFPageRef;
         
-         return pagebarImage;
+        CATiledLayer *tiledLayer = (CATiledLayer *)[self layer];
+        
+        tiledLayer.levelsOfDetail = ZOOM_OUT_LEVELS + ZOOM_IN_LEVELS + 1;
+        tiledLayer.levelsOfDetailBias = ZOOM_IN_LEVELS;
+        tiledLayer.tileSize = CGSizeMake(512.0, 512.0);
+        
     }
-    else {
-        NSLog(@"Error while loading pdf page number: %i", page);
-          return nil;
-    }
+    return self;
+}
+
++ (Class)layerClass
+{
+	return [CATiledLayer class];
+}
+
+-(void)drawRect:(CGRect)r {
+    
+}
+
+-(void)drawLayer:(CALayer*)layer inContext:(CGContextRef)context
+{
+
+
+    CGContextSetRGBFillColor(context, 1.0,1.0,1.0,1.0);
+    CGContextFillRect(context, self.bounds);
+
+    CGContextSaveGState(context);
+    CGContextTranslateCTM(context, 0.0, self.bounds.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+
+    CGContextScaleCTM(context, _scale, _scale);
+
+    CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+    CGContextSetRenderingIntent(context, kCGRenderingIntentDefault);
+
+
+    CGContextDrawPDFPage(context, _onePDFPageRef);
+
+    CGContextRestoreGState(context);
+
 
 }
 
-
-- (RoboContentPage *)getTiledPage:(int)page {
-#ifdef HARDCORX
-	NSLog(@"%s", __FUNCTION__);
-#endif
-    CGPDFPageRef onePDFPageRef = CGPDFDocumentGetPage([RoboPDFDocRef instance:nil].thePDFDocRef, page);
-    return [[RoboContentPage alloc] initWithPageRef:onePDFPageRef viewRect:[RoboPDFInfo instance].pdfRect];
-}
- */
 
 - (void)dealloc {
 
-    //dispatch_release(backgroundQueueViews);
+    ((CATiledLayer *)[self layer]).contents=nil;
+    ((CATiledLayer *)[self layer]).delegate = nil;
+    [self.layer removeFromSuperlayer];
+
 }
+
+@end
+
+
+@implementation PDFPageRefObject
 
 
 @end

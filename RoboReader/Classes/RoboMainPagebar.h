@@ -23,6 +23,7 @@
 #import "RoboPDFController.h"
 
 
+
 @class RoboMainPagebar;
 @class RoboTrackControl;
 @class RoboDocument;
@@ -35,10 +36,10 @@
 
 @end
 
-@interface ImagesFlags : NSObject
+@interface ImagesFlags: NSObject
 
-@property(atomic) BOOL onPageBar;
-@property(atomic) BOOL isRendered;
+@property (atomic) BOOL onPageBar;
+@property (atomic) BOOL isRendered;
 
 @end
 
@@ -55,18 +56,19 @@
 
     UIView *pageLabelView;
 
-    UISlider *pagebarSlider;
+    UISlider  *pagebarSlider;
 
     BOOL sliderValueChanged;
 
     NSTimer *trackTimer;
 
-    RoboPDFController *pdfController;
+    RoboPDFController * pdfController;
 
     float previewPageWidth;
     int beginPage;
     int endPage;
-    NSMutableArray *imagesFlags;
+    BOOL flagMemoryIsOK;
+    NSMutableArray* imagesFlags;
     float offsetCounter;
     float maxOffsetForUpdate;
     float prevOffset;
@@ -74,24 +76,20 @@
 
     BOOL inited;
 }
-@property(atomic, retain) NSMutableDictionary *pagesDict;
-@property(atomic, retain) NSMutableDictionary *renderedPages;
+@property (atomic, retain) NSMutableDictionary* pagesDict;
+@property (atomic, retain) NSMutableDictionary* renderedPages;
 
-@property(nonatomic, unsafe_unretained, readwrite) id <RoboMainPagebarDelegate> delegate;
+@property (nonatomic, unsafe_unretained, readwrite) id <RoboMainPagebarDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame document:(RoboDocument *)object pdfController:(RoboPDFController *)pdfController;
 
 - (void)pagebarImageLoadingComplete:(UIImage *)pageBarImage page:(int)page;
-
 - (void)hidePagebar;
-
 - (void)showPagebar;
+- (void) didReceiveMemoryWarning;
 
-- (void)didReceiveMemoryWarning;
-
-- (void)reset;
-
-- (void)start;
+- (void) reset;
+-(void) start;
 
 @end
 
@@ -110,9 +108,8 @@
 
 }
 
-@property(nonatomic, assign, readonly) CGFloat value;
+@property (nonatomic, assign, readonly) CGFloat value;
 
 - (id)initWithFrame:(CGRect)frame page:(int)page previewPageWidth:(float)previewPageWidth lastPage:(int)lPage;
-
 - (void)setStrokePage:(int)page;
 @end

@@ -61,7 +61,7 @@
         [self addSubview:toolbarImg];
 
         // shift buttons a little to avoid overlapping with ios7 status bar
-        float ios7padding = (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) ? 7.0f : 0.0f;
+        float ios7padding = 0.0f;
 
         CGRect titleRect = CGRectMake(titleX, TITLE_Y + ios7padding, titleWidth, TITLE_HEIGHT);
 

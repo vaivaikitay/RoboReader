@@ -28,259 +28,318 @@
 @synthesize delegate;
 
 - (void)showDocument {
+    
+    
+	[self updateScrollViewContentSize]; 
+    
+    int startPageNumber = [document.currentPage intValue];
+    
 
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [self.view setAlpha:0.0];
+    } completion:^(BOOL finished) {
+        [self showDocumentPage:startPageNumber fastScroll:NO];
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+             [self.view setAlpha:1.0];
+        } completion:^(BOOL finished) {
+        }];
+       
+    }];
 
-    [self updateScrollViewContentSize];
-
-    startPageNumber = [document.currentPage intValue];
-//    if (startPageNumber <= 1)
-//        startPageNumber = 2;
-
-//    [self showDocumentPage:1 fastScroll:NO];
-
-
-//    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-//        [self.view setAlpha:0.0];
-//    }                completion:^(BOOL finished) {
-//        [self showDocumentPage:startPageNumber fastScroll:NO];
-//        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-//            [self.view setAlpha:1.0];
-//        }                completion:nil];
-//
-//    }];
-
-    [self showDocumentPage:startPageNumber fastScroll:NO];
-
-    document.lastOpen = [NSDate date];
-
+	document.lastOpen = [NSDate date];
+    
 }
 
 - (void)updateScrollViewContentSize {
-
-
-    int count = [document.pageCount intValue];
+    
+	int count = [document.pageCount intValue];
     if (count == 0)
         count = 1;
 
-    CGFloat contentHeight = theScrollView.bounds.size.height;
+	CGFloat contentHeight = theScrollView.bounds.size.height;
 
-    CGFloat contentWidth;
-    
+	CGFloat contentWidth;
     if (isLandscape)
-        contentWidth = CGRectGetWidth(self.view.frame) * (count / 2 + 1);
+        contentWidth = 1024.0f * (count / 2 + 1);
     else
-        contentWidth = CGRectGetWidth(self.view.frame) * count;
+        contentWidth = 768.0f * count;
 
-    theScrollView.contentSize = CGSizeMake(contentWidth, contentHeight);
+	theScrollView.contentSize = CGSizeMake(contentWidth, contentHeight);
 
 }
 
-
-- (void)pageContentLoadingComplete:(int)page pageBarImage:(UIImage *)pageBarImage rightSide:(BOOL)rightSide zoomed:(BOOL)zoomed {
-
-    int fullPageNum = page;
-    if (rightSide) {
-        if (fullPageNum % 2)
-            fullPageNum -= 1;
+- (void)pdfViewLoadingComplete:(int)page pdfView:(RoboPDFView *)pdfView rightSide:(BOOL)rightSide {
+    
+    
+    if (rightSide)
+    {
+        if (page % 2)
+            page -= 1;
     }
-    NSString *key;
-    if (rightSide && fullPageNum == 0)
-        key = @"1";
-    else
-        key = [NSString stringWithFormat:@"%i", fullPageNum];
-    RoboContentView *contentView = contentViews[key];
+    
+    NSString *key = [NSString stringWithFormat:@"%i",page];
+    RoboContentView *contentView  = contentViews[key];
+    
     if (contentView) {
-        [contentView pageContentLoadingComplete:pageBarImage rightSide:rightSide zoomed:zoomed];
+        
+        [contentView pdfViewLoadingComplete:pdfView rightSide:rightSide];
+    
     }
+
 }
 
-- (void)getZoomedPages:(int)pageNum isLands:(BOOL)isLands  zoomIn:(BOOL)zoomIn; {
+- (void)pageContentLoadingComplete:(int)page pageBarImage:(UIImage *)pageBarImage rightSide:(BOOL)rightSide {
+    
+    if (rightSide)
+    {
+        if (page % 2)
+            page -= 1;
+    }
+    
+    NSString *key = [NSString stringWithFormat:@"%i",page];
+    RoboContentView *contentView  = contentViews[key];
+    
+    if (contentView) {
+        
+        [contentView pageContentLoadingComplete:pageBarImage rightSide:rightSide];
+    }
+    
+}
 
-    [pdfController getZoomedPageContent:pageNum isLands:isLands];
-    if (isLands && pageNum != 1)
-        [pdfController getZoomedPageContent:pageNum + 1 isLands:isLands];
+- (void)getZoomedPages:(int)pageNum isLands:(BOOL)isLands {
+        
+    //[pdfController getZoomedPageContent:pageNum isLands:isLands];
+    //if (isLands && pageNum != 1)
+      //  [pdfController getZoomedPageContent:pageNum+1 isLands:isLands];
 }
 
 
 - (void)showDocumentPage:(int)page fastScroll:(BOOL)fastScroll {
+    
+    if (page < 1)
+        page = 1;
+    
+    if (page > [document.pageCount intValue])
+        page = [document.pageCount intValue];
 
-    if ((page < 1) || (page > [document.pageCount intValue]))
-        return;
+    int minValue; int maxValue;
 
-    int minValue;
-    int maxValue;
-
-    if (isLandscape) {
-
-        if (page != 1 && page % 2)
+    if (isLandscape)
+    {
+        
+        if (page % 2)
             page -= 1;
-
-        minValue = (page - 2);
-        maxValue = (page + 2);
-
-
-        if (page == 1) {
-
+        
+        
+        if (page == 0) {
+            
             minValue = 0;
-            maxValue = 2;
-
+            maxValue = 3;
+            
         }
-        if (page == 2) {
-
-            minValue = 0;
-            maxValue = 4;
+        else {
+            
+            minValue = (page - 2);
+            maxValue = (page + 3);
+            
         }
-
+        
     }
     else {
-
-        minValue = (page - 1);
-        maxValue = (page + 1);
-
+        
         if (page == 1) {
-
+            
             minValue = 1;
             maxValue = 2;
+            
+        }
+        else {
+            
+            minValue = (page - 1);
+            maxValue = (page + 1);
+            
         }
 
     }
 
+    if (maxValue > [document.pageCount intValue])
+        maxValue = [document.pageCount intValue];
+    
     pdfController.currentPage = page;
-    CGRect viewRect = CGRectZero;
-    viewRect.size = theScrollView.bounds.size;
+    CGRect viewRect = CGRectZero; viewRect.size = theScrollView.bounds.size;
     if (isLandscape)
         viewRect.origin.x = viewRect.size.width * minValue / 2;
     else
         viewRect.origin.x = viewRect.size.width * (minValue - 1);
-
+    
     // if rotated => kill all content
     // else - free memory of unnecessary content
-
+    
     if (didRotate) {
-
+        
+               
         didRotate = NO;
+        
+        
+        for (NSString *key in pdfController.loadedPages) {
+            
+            NSString *keyToRemove;
+            
+            if (!isLandscape) {
+                
+                int removingKeyInInt = [key intValue];
+                
+                if (removingKeyInInt % 2)
+                    removingKeyInInt -= 1;
+                
+                keyToRemove = [NSString stringWithFormat:@"%i", removingKeyInInt];
+                
+            }
+            else {
+                
+                keyToRemove = key;
+            
+            }
 
-        for (NSString *key in loadedPages) {
-            RoboContentView *contentView = contentViews[key];
+            RoboContentView *contentView  = contentViews[keyToRemove];
             [contentView removeFromSuperview];
-            [contentViews removeObjectForKey:key];
-
+            [contentViews removeObjectForKey:keyToRemove];
+            
         }
-        [loadedPages removeAllObjects];
-        [self updateScrollViewContentSize];
+        
+        [pdfController.viewQueue cancelAllOperations];
+        [pdfController.loadedPages removeAllObjects];
 
+        [self updateScrollViewContentSize];
+        
+    }
+    else if (isLandscape) {
+        
+        for (NSString *key in [pdfController.loadedPages allObjects]) {
+            
+            NSOperation *op = pdfController.opDict[key];
+            
+            if ([key intValue] == page || [key intValue] == page + 1) {
+                
+                [op setQueuePriority:NSOperationQueuePriorityHigh];
+            }
+            else if ((page - [key intValue] >= 3) || ([key intValue] - page >= 4)) {
+                
+                RoboContentView *contentView  = contentViews[key];
+                [contentView removeFromSuperview];
+                [contentViews removeObjectForKey:key];
+                
+                [pdfController.loadedPages removeObject:key];
+                NSOperation *op  = pdfController.opDict[key];
+                [op cancel];
+                
+            }
+            else {
+                
+                [op setQueuePriority:NSOperationQueuePriorityNormal];
+            }
+            
+        }
     }
     else {
+        for (NSString *key in [pdfController.loadedPages allObjects]) {
+            NSOperation *op = pdfController.opDict[key];
+            if ([key intValue] == page) {
+                [op setQueuePriority:NSOperationQueuePriorityHigh];
+            }
+            else if (abs ([key intValue] - page) >= 2) {
+                
+                RoboContentView *contentView  = contentViews[key];
+                [contentView removeFromSuperview];
+                [contentViews removeObjectForKey:key];
 
-        if (isLandscape) {
-            for (NSString *key in [loadedPages allObjects]) {
-                if ((page - [key intValue] > 2) || ([key intValue] - page > 3)) {
-                    RoboContentView *contentView = contentViews[key];
-                    [contentView removeFromSuperview];
-                    [contentViews removeObjectForKey:key];
-                    [loadedPages removeObject:key];
-
-                }
+                [pdfController.loadedPages removeObject:key];
+                NSOperation *op  = pdfController.opDict[key];
+                [op cancel];
+                
+            }
+            else {
+                [op setQueuePriority:NSOperationQueuePriorityNormal];
             }
         }
-        else {
-            for (NSString *key in [loadedPages allObjects]) {
-                if (abs([key intValue] - page) > 1) {
-                    RoboContentView *contentView = contentViews[key];
-                    [contentView removeFromSuperview];
-                    [contentViews removeObjectForKey:key];
-                    [loadedPages removeObject:key];
-
-                }
-            }
-        }
-
     }
-
+    
     for (int number = minValue; number <= maxValue; number++) {
-
-        NSString *key;
-        if (isLandscape && number == 0)
-            key = @"1";
-        else
-            key = [NSString stringWithFormat:@"%i", number];
-
-        RoboContentView *contentView = contentViews[key];
+        
+        NSString *key = [NSString stringWithFormat:@"%i",number];
+        RoboContentView *contentView  = contentViews[key];
         if (!contentView) {
-
+            
             contentView = [[RoboContentView alloc] initWithFrame:viewRect page:number orientation:isLandscape];
-
-            contentView.delegate = self;
-
+            
             [theScrollView addSubview:contentView];
             contentViews[key] = contentView;
-
-            [loadedPages addObject:key];
+        
         }
-
+      
         viewRect.origin.x += viewRect.size.width;
         if (isLandscape)
             number++;
-
+        
     }
-
+    
     [pdfController getPagesContentFromPage:minValue toPage:maxValue isLands:isLandscape];
-
+    
     if (!fastScroll) {
         if (isLandscape)
-            theScrollView.contentOffset = CGPointMake(viewRect.size.width * (page / 2), 0);
+            theScrollView.contentOffset = CGPointMake(viewRect.size.width * (page / 2) , 0);
         else
             theScrollView.contentOffset = CGPointMake(viewRect.size.width * (page - 1), 0);
     }
-
-
-    if ([document.currentPage intValue] != page) {
+  
+    
+    if ([document.currentPage intValue] != page) 
+    {
         document.currentPage = @(page);
     }
-
+    
 }
 
 
 - (id)initWithRoboDocument:(RoboDocument *)object {
 
+	id robo = nil;
 
-    id robo = nil; // RoboViewController object
+	if ((object != nil) && ([object isKindOfClass:[RoboDocument class]]))
+	{
+		if ((self = [super initWithNibName:nil bundle:nil]))
+		{
 
-    if ((object != nil) && ([object isKindOfClass:[RoboDocument class]])) {
-        if ((self = [super initWithNibName:nil bundle:nil])) // Designated initializer
-        {
             NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
-            [notificationCenter addObserver:self selector:@selector(applicationWill:) name:UIApplicationWillTerminateNotification object:nil];
+			[notificationCenter addObserver:self selector:@selector(applicationWill:) name:UIApplicationWillTerminateNotification object:nil];
 
-            [notificationCenter addObserver:self selector:@selector(applicationWill:) name:UIApplicationWillResignActiveNotification object:nil];
+			[notificationCenter addObserver:self selector:@selector(applicationWill:) name:UIApplicationWillResignActiveNotification object:nil];
 
-            [object updateProperties];
-
-            document = object;
-
-
-            robo = self;
+			[object updateProperties];
             
-            // get the current device orientation to determine initial isLandscape variable
-            UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-            isLandscape = interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight;
-        }
-    }
+            document = object;
+            
+			robo = self; 
+		}
+	}
 
-    return robo;
+	return robo;
+
 }
 
 
 - (void)hideBars {
+    
     if (!barsHiddenFlag) {
         [UIView animateWithDuration:0.1 delay:0.0
                             options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
-                         animations:^(void) {
-                             [[UIApplication sharedApplication] setStatusBarHidden:YES];
-                         }
+                         animations:^(void)
+         {
+             [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
+         }
                          completion:nil
-        ];
+         ];        
         [mainToolbar hideToolbar];
         [mainPagebar hidePagebar];
         barsHiddenFlag = YES;
@@ -289,374 +348,367 @@
 }
 
 - (void)showBars {
+    
     if (barsHiddenFlag) {
         [UIView animateWithDuration:0.1 delay:0.0
                             options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
-                         animations:^(void) {
-                             [[UIApplication sharedApplication] setStatusBarHidden:NO];
-                         }
+                         animations:^(void)
+         {
+             [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:NO];
+         }
                          completion:nil
-        ];
+         ];
         [mainToolbar showToolbar];
         [mainPagebar showPagebar];
         barsHiddenFlag = NO;
     }
+    
 }
 
 - (void)nextPage:(id)sender {
+
     [self hideBars];
     CGPoint newContOffset = theScrollView.contentOffset;
-    newContOffset.x += CGRectGetWidth(self.view.frame);
+    if (isLandscape) {
+        newContOffset.x += 1024.0f;
+    }
+    else {
+        newContOffset.x += 768.0f;
+    }
     if (newContOffset.x < theScrollView.contentSize.width) {
         [UIView animateWithDuration:0.5f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [theScrollView setContentOffset:newContOffset];
-        }                completion:^(BOOL finished) {
-        }];
-
-    }
-}
-
-- (void)prevPage:(id)sender {
-
-    [self hideBars];
-    CGPoint newContOffset = theScrollView.contentOffset;
-    newContOffset.x -= CGRectGetWidth(self.view.frame);
-    if (newContOffset.x >= 0) {
-        [UIView animateWithDuration:0.5f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            [theScrollView setContentOffset:newContOffset];
-        }                completion:^(BOOL finished) {
-        }];
-    }
-}
-
-- (void)viewDidLoad {
-#ifdef DEBUGX
-	NSLog(@"%s %@", __FUNCTION__, NSStringFromCGRect(self.view.bounds));
-#endif
-
-    [super viewDidLoad];
-
-    NSAssert(!(document == nil), @"RoboDocument == nil");
-
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-        self.automaticallyAdjustsScrollViewInsets = NO;
-    }
-    else {
-        [self setWantsFullScreenLayout:YES];
+        } completion:^(BOOL finished){}];
         
     }
     
+}
+
+- (void)prevPage:(id)sender {
+    
+    [self hideBars];
+    CGPoint newContOffset = theScrollView.contentOffset;
+    if (isLandscape) {
+        
+        newContOffset.x -= 1024.0f;
+    }
+    else {
+        
+        newContOffset.x -= 768.0f;
+    
+    }
+    if (newContOffset.x >= 0) {
+        [UIView animateWithDuration:0.5f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [theScrollView setContentOffset:newContOffset];
+        } completion:^(BOOL finished){}];
+    }
+    
+}
+
+- (void)viewDidLoad {
+
+
+	[super viewDidLoad];
+
+	NSAssert(!(document == nil), @"RoboDocument == nil");
+        
     CGRect viewRect = self.view.bounds;
 
-
-    self.view.backgroundColor = [UIColor blackColor];
-
+    
+	self.view.backgroundColor = [UIColor blackColor];
+    
     [RoboPDFModel instance].numberOfPages = [document.pageCount intValue];
-
+    
     pdfController = [[RoboPDFController alloc] initWithDocument:document];
     pdfController.viewDelegate = self;
-    pdfController.fileURL = document.fileURL;
-    pdfController.password = document.password;
-//
-//    if (small_document != nil) {
-//        smallPdfController = [[RoboPDFController alloc] initWithDocument:small_document];
-//        smallPdfController.viewDelegate = self;
-//        smallPdfController.isSmall = YES;
-//    }
 
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-
-
-    contentViews = [[NSMutableDictionary alloc] init];
-    loadedPages = [[NSMutableSet alloc] init];
-
-
-    theScrollView = [[UIScrollView alloc] initWithFrame:viewRect]; // All
-
-    theScrollView.scrollsToTop = NO;
-    theScrollView.pagingEnabled = YES;
-    //theScrollView.delaysContentTouches = NO;
-    theScrollView.showsVerticalScrollIndicator = NO;
-    theScrollView.showsHorizontalScrollIndicator = NO;
-    theScrollView.contentMode = UIViewContentModeRedraw;
-    theScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    theScrollView.backgroundColor = [UIColor clearColor];
-    theScrollView.userInteractionEnabled = YES;
-    theScrollView.autoresizesSubviews = NO;
-    theScrollView.delegate = self;
-
-    [self.view addSubview:theScrollView];
-
-    CGRect toolbarRect = viewRect;
-    toolbarRect.size.height = READER_TOOLBAR_HEIGHT;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
     
-    // if it is ios7+, just use all the status bar space
-    toolbarRect.origin.y = (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) ? 0.0f : 20.0f;
+    
+    contentViews = [[NSMutableDictionary alloc] init];    
+    
+	theScrollView = [[UIScrollView alloc] initWithFrame:viewRect]; // All
+    
+	theScrollView.scrollsToTop = NO;
+	theScrollView.pagingEnabled = YES;
+	//theScrollView.delaysContentTouches = NO;
+	theScrollView.showsVerticalScrollIndicator = NO;
+	theScrollView.showsHorizontalScrollIndicator = NO;
+	theScrollView.contentMode = UIViewContentModeRedraw;
+	theScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	theScrollView.backgroundColor = [UIColor clearColor];
+	theScrollView.userInteractionEnabled = YES;
+	theScrollView.autoresizesSubviews = NO;
+	theScrollView.delegate = self;
+
+	[self.view addSubview:theScrollView];
+
+	CGRect toolbarRect = viewRect;
+	toolbarRect.size.height = READER_TOOLBAR_HEIGHT;
+    toolbarRect.origin.y = 20.0f;
     NSString *toolbarTitle = (self.title == nil) ? [document.fileName stringByDeletingPathExtension] : self.title;
+	mainToolbar = [[RoboMainToolbar alloc] initWithFrame:toolbarRect title:toolbarTitle];
 
-    mainToolbar = [[RoboMainToolbar alloc] initWithFrame:toolbarRect title:toolbarTitle];
+	mainToolbar.delegate = self;
 
-    mainToolbar.delegate = self;
+	[self.view addSubview:mainToolbar];
 
-    [self.view addSubview:mainToolbar];
+	CGRect pagebarRect = viewRect;
+	pagebarRect.size.height = PAGEBAR_HEIGHT;
+	pagebarRect.origin.y = (viewRect.size.height - PAGEBAR_HEIGHT);
 
-    CGRect pagebarRect = viewRect;
-    pagebarRect.size.height = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? PAGEBAR_HEIGHT_PAD : PAGEBAR_HEIGHT_PHONE;
-    pagebarRect.origin.y = (viewRect.size.height - pagebarRect.size.height);
-
-    if (smallPdfController != nil) {
-        mainPagebar = [[RoboMainPagebar alloc] initWithFrame:pagebarRect document:document pdfController:smallPdfController];
-    } else {
-        mainPagebar = [[RoboMainPagebar alloc] initWithFrame:pagebarRect document:document pdfController:pdfController];
-    }
-    mainPagebar.delegate = self;
-    [self.view addSubview:mainPagebar];
+    mainPagebar = nil;
+//	mainPagebar = [[RoboMainPagebar alloc] initWithFrame:pagebarRect document:document pdfController:pdfController];
+//	mainPagebar.delegate = self;
+//	[self.view addSubview:mainPagebar];
 
     UITapGestureRecognizer *singleTapOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-    singleTapOne.numberOfTouchesRequired = 1;
-    singleTapOne.numberOfTapsRequired = 1;
-    singleTapOne.delegate = self;
+	singleTapOne.numberOfTouchesRequired = 1; singleTapOne.numberOfTapsRequired = 1; singleTapOne.delegate = self;
 
+   
+	[self.view addGestureRecognizer:singleTapOne];
 
-    [self.view addGestureRecognizer:singleTapOne];
-
-
+    
     leftButton = [[UIButton alloc] init];
     [leftButton addTarget:self action:@selector(prevPage:) forControlEvents:UIControlEventTouchDown];
     [self.view insertSubview:leftButton aboveSubview:theScrollView];
-
+    
     rightButton = [[UIButton alloc] init];
     [rightButton addTarget:self action:@selector(nextPage:) forControlEvents:UIControlEventTouchDown];
-    [self.view insertSubview:rightButton aboveSubview:theScrollView];
-
+    [self.view  insertSubview:rightButton aboveSubview:theScrollView];
+    
     [self willAnimateRotationToInterfaceOrientation:self.interfaceOrientation duration:0];
-
+    
     barsHiddenFlag = YES;
 
 }
 
 
 - (void)viewDidAppear:(BOOL)animated {
-#ifdef DEBUGX
-	NSLog(@"%s %@", __FUNCTION__, NSStringFromCGRect(self.view.bounds));
-#endif
 
-    [super viewDidAppear:animated];
+
+	[super viewDidAppear:animated];
 
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
         isLandscape = YES;
     else
         isLandscape = NO;
-
+	
     [self showDocument];
 
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-#ifdef DEBUGX
-	NSLog(@"%s %@", __FUNCTION__, NSStringFromCGRect(self.view.bounds));
-#endif
 
-    [super viewWillDisappear:animated];
 
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+	[super viewWillDisappear:animated];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:NO];
 
 }
 
 
 - (void)viewDidUnload {
-
-    mainToolbar = nil;
-
+    
+	mainToolbar = nil;
+    
     mainPagebar = nil;
 
-    theScrollView = nil;
+	theScrollView = nil; 
 
-
-    [super viewDidUnload];
-
+    
+	[super viewDidUnload];
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-#ifdef DEBUGX
-	NSLog(@"%s (%d)", __FUNCTION__, interfaceOrientation);
-#endif
 
-    return YES;
+	return YES;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-#ifdef DEBUGX
-	NSLog(@"%s %@ (%d)", __FUNCTION__, NSStringFromCGRect(self.view.bounds), toInterfaceOrientation);
-#endif
 
+    
     if (UIDeviceOrientationIsLandscape(toInterfaceOrientation))
         isLandscape = YES;
     else
         isLandscape = NO;
-
+    
     didRotate = YES;
-    pdfController.didRotate = YES;
-
+    
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
-#ifdef DEBUGX
-	NSLog(@"%s %@ (%d)", __FUNCTION__, NSStringFromCGRect(self.view.bounds), interfaceOrientation);
-#endif
+
     if (UIDeviceOrientationIsLandscape(interfaceOrientation)) {
-
+        
         if (![[UIApplication sharedApplication] isStatusBarHidden]) {
-
-            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-                [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-                [self.view setFrame:CGRectMake(0, 0.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-            } else {
-                [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-                [self.view setFrame:CGRectMake(0, -20.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-            }
+            
+            [self.view setBounds:CGRectMake(0, 0, 1024.0f, 768.0f)];
+            [self.view setFrame:CGRectMake(0, -20.0f, 1024.0f, 768.0f)];
             
         }
-
-        [leftButton setFrame:CGRectMake(0, 0, 66.0f, CGRectGetHeight(self.view.frame))];
-        [rightButton setFrame:CGRectMake(958.0f, 0, 66.0f, CGRectGetHeight(self.view.frame))];
-
+        
+        [leftButton setFrame:CGRectMake(0, 0, 66.0f, 768.0f)];
+        [rightButton setFrame:CGRectMake(958.0f, 0, 66.0f, 768.0f)];
+        
     }
     else {
         if (![[UIApplication sharedApplication] isStatusBarHidden]) {
 
-            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-                [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-                [self.view setFrame:CGRectMake(0, 0.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-            } else {
-                [self.view setBounds:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-                [self.view setFrame:CGRectMake(0, -20.0f, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
-            }
-
+            [self.view setBounds:CGRectMake(0, 0, 768.0f, 1024.0f)];
+            [self.view setFrame:CGRectMake(0, -20.0f, 768.0f, 1024.0f)];
+            
         }
-        [leftButton setFrame:CGRectMake(0, 0, 66.0f, CGRectGetHeight(self.view.frame))];
-        [rightButton setFrame:CGRectMake(702.0f, 0, 66.0f, CGRectGetHeight(self.view.frame))];
-
+        [leftButton setFrame:CGRectMake(0, 0, 66.0f, 1024.0f)];
+        [rightButton setFrame:CGRectMake(702.0f, 0, 66.0f, 1024.0f)];
+        
     }
 
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-#ifdef DEBUGX
-	NSLog(@"%s %@ (%d to %d)", __FUNCTION__, NSStringFromCGRect(self.view.bounds), fromInterfaceOrientation, self.interfaceOrientation);
-#endif
 
-    [self showDocumentPage:[document.currentPage intValue] fastScroll:NO];
+
+   [self showDocumentPage:[document.currentPage intValue] fastScroll:NO];
 
 }
 
 - (void)didReceiveMemoryWarning {
+    
 
+	[super didReceiveMemoryWarning];
 
-    [super didReceiveMemoryWarning];
+    [pdfController cleanMemory];
 
-    pdfController.resetPdfDoc = YES;
-
-    if (smallPdfController) {
-        smallPdfController.resetPdfDoc = YES;
-    }
+//    @synchronized (self) {
+//
+//        emergencyPageNum = [document.currentPage intValue];
+//        emergencyIsLands = isLandscape;
+//
+//
+//        [pdfController cleanMemory];
+//
+//        for (NSString *key in contentViews) {
+//
+//            RoboContentView *contentView  = contentViews[key];
+//            [contentView removeFromSuperview];
+//
+//        }
+//
+//        [contentViews removeAllObjects];
+//        [pdfController.loadedPages removeAllObjects];
+//
+//
+//    }
 
 }
 
-- (void)dealloc {
 
+- (void)reloadCurrentPage {
+
+    if (emergencyPageNum == [document.currentPage intValue] && emergencyIsLands == isLandscape)
+        [self showDocumentPage:emergencyPageNum fastScroll:NO];
+
+}
+
+
+- (void)dealloc  {
+    
     [pdfController stopMashina];
 
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
-    mainToolbar = nil;
-    mainPagebar = nil;
+	mainToolbar = nil; mainPagebar = nil;
 
-    theScrollView = nil;
+	theScrollView = nil; 
 
-    document = nil;
-
-
+	document = nil;
+    
+    
 }
 
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
-
+    
     [self hideBars];
 }
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
+    
     if (!didRotate) {
-
+        
         CGFloat pageWidth;
         int currentPage = [document.currentPage intValue];
         int page;
         if (isLandscape) {
-            pageWidth = CGRectGetWidth(self.view.frame) / 2;
+            pageWidth = 512.0f;
             page = floor((theScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
             if (currentPage != page && currentPage != page + 1 && currentPage != page - 1)
                 [self showDocumentPage:page fastScroll:YES];
         }
         else {
-            pageWidth = CGRectGetWidth(self.view.frame);
+            pageWidth = 768.0f;
             page = floor((theScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 2;
             if (currentPage != page)
                 [self showDocumentPage:page fastScroll:YES];
         }
-
+        
     }
 }
 
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)recognizer shouldReceiveTouch:(UITouch *)touch {
-
-    if ([touch.view isKindOfClass:[UIScrollView class]]) return YES;
-
-    return NO;
+    
+   	if ([touch.view isKindOfClass:[UIScrollView class]]) return YES;
+    
+	return NO;
 }
 
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-
-
+    
+ 
     if (barsHiddenFlag) {
         [self showBars];
     }
     else {
         [self hideBars];
     }
-
+	   
 }
 
 
 - (void)dismissButtonTapped {
+    
 
 
-    [document saveRoboDocument];
+	[document saveRoboDocument];
 
-    if ([delegate respondsToSelector:@selector(dismissRoboViewController:)] == YES) {
-        [delegate dismissRoboViewController:self];
-    }
-    else {
-        NSAssert(NO, @"Delegate must respond to -dismissRoboViewController:");
-    }
+	if ([delegate respondsToSelector:@selector(dismissRoboViewController:)] == YES)
+	{
+		[delegate dismissRoboViewController:self];
+	}
+	else
+	{
+		NSAssert(NO, @"Delegate must respond to -dismissRoboViewController:");
+	}
 
 }
 
 
 - (void)openPage:(int)page {
+    
 
-
-    [self showDocumentPage:page fastScroll:NO];
+	[self showDocumentPage:page fastScroll:NO];
 }
 
 
 - (void)applicationWill:(NSNotification *)notification {
+    
 
-
-    [document saveRoboDocument]; // Save any RoboDocument object changes
+	[document saveRoboDocument]; // Save any RoboDocument object changes
 
 }
 

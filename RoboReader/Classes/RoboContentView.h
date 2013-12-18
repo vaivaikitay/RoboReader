@@ -21,41 +21,36 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol RoboContentViewDelegate <NSObject>
-
-@optional
-
-- (void)getZoomedPages:(int)pageNum isLands:(BOOL)isLands zoomIn:(BOOL)zoomIn;
-
-@end
 
 @interface RoboContentView : UIView <UIScrollViewDelegate> {
 @private
-
-    UIScrollView *theScrollView;
+    
+	UIScrollView *theScrollView;
     BOOL _isLandscape;
-
+   
     UIImageView *theContentViewImagePDF;
     UIImageView *theContentViewImage2PDF;
-
+    
     UITextField *pageNumberTextField;
     UITextField *pageNumberTextField2;
-
-    UIView *theContainerView;
-    BOOL noTiledLayer;
+    
+    
+    
+	UIView *theContainerView;
     int pageNumber;
-
+    
     BOOL flag1Loaded;
     BOOL flag2Loaded;
-
+    
+    
 }
 
 
 - (id)initWithFrame:(CGRect)frame page:(NSUInteger)page orientation:(BOOL)isLandscape;
 
-- (void)pageContentLoadingComplete:(UIImage *)pageBarImage rightSide:(BOOL)rightSide zoomed:(BOOL)zoomed;
+- (void)pageContentLoadingComplete:(UIImage *)pageBarImage rightSide:(BOOL)rightSide;
 
-@property(nonatomic, unsafe_unretained, readwrite) id <RoboContentViewDelegate> delegate;
+- (void)pdfViewLoadingComplete:(UIView *)pdfView rightSide:(BOOL)rightSide;
 
 
 @end

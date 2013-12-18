@@ -10,11 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RoboReader/Classes/RoboViewController.m"
-            timestampString = "404138748.144792"
+            timestampString = "409083807.111905"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21">
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "-showDocument"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

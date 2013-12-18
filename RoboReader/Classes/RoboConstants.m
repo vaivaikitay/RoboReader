@@ -24,13 +24,9 @@
 @implementation RoboConstants
 @synthesize retinaDisplay = _retinaDisplay;
 
-+ (RoboConstants *)instance {
++(RoboConstants *)instance {
 
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
-
-    static RoboConstants *instance = nil;
+    static RoboConstants* instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[self alloc] init];
@@ -38,21 +34,19 @@
     return instance;
 }
 
-
 - (id)init {
-
+    
     if (self = [super init]) {
-
+        
         _retinaDisplay = [self isRetinaDisplay];
     }
     return self;
 }
 
-
-- (BOOL)isRetinaDisplay {
-
+-(BOOL)isRetinaDisplay {
+    
     if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
-            ([UIScreen mainScreen].scale == 2.0)) {
+        ([UIScreen mainScreen].scale == 2.0)) {
         return YES;
     } else {
         return NO;

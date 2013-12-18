@@ -19,7 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 
@@ -28,7 +27,7 @@
 #import "RoboMainToolbar.h"
 #import "RoboMainPagebar.h"
 #import "RoboConstants.h"
-
+#import "RoboPDFController.h"
 
 @class RoboViewController;
 @class RoboMainToolbar;
@@ -42,36 +41,33 @@
 @end
 
 @interface RoboViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate,
-        RoboMainToolbarDelegate, RoboMainPagebarDelegate, PDFControllerDelegateToView, RoboContentViewDelegate> {
-@private
+													RoboMainToolbarDelegate, RoboMainPagebarDelegate, PDFControllerDelegateToView> {
+@private 
 
-    RoboDocument *document;
+	RoboDocument *document;
 
-    UIScrollView *theScrollView;
+	UIScrollView *theScrollView;
     RoboPDFController *pdfController;
-    RoboPDFController *smallPdfController;
-
-
-    RoboMainPagebar *mainPagebar;
+    
+	RoboMainPagebar *mainPagebar;
     RoboMainToolbar *mainToolbar;
 
-    NSMutableDictionary *contentViews;
-    NSMutableSet *loadedPages;
-
-    int startPageNumber;
-
+	NSMutableDictionary *contentViews;
+                                                
     BOOL isLandscape;
     BOOL didRotate;
     BOOL barsHiddenFlag;
-
+        
     UIButton *leftButton;
     UIButton *rightButton;
 
+    int emergencyPageNum;
+    BOOL emergencyIsLands;
+
 }
 
-@property(nonatomic, unsafe_unretained, readwrite) id <RoboViewControllerDelegate> delegate;
+@property (nonatomic, unsafe_unretained, readwrite) id <RoboViewControllerDelegate> delegate;
 
 - (id)initWithRoboDocument:(RoboDocument *)object;
-//- (id)initWithRoboDocument:(RoboDocument *)object small_document:(RoboDocument *)small_object;
 
 @end
