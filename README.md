@@ -3,6 +3,7 @@
 
 With a couple of lines of code you can create a PDF view controller. This framework is very fast and easy to use.
 
+
 ## Sample usage
 
 ``` objective-c
@@ -22,6 +23,15 @@ RoboViewController *r = [[RoboViewController alloc] initWithDocument:document];
 
 ```
 
+
+## Installation via CocoaPods
+
+Add this line to your Podfile
+```
+pod 'RoboReaderPDF'
+```
+
+
 ## Credits
 
 RoboReader was created by [Mikhail Viceman](https://github.com/vaivaikitay) in the development of  [Digital Edition platform] (http://digitaled.ru) [Copyright (c) REDMADROBOT] (http://redmadrobot.ru).
@@ -31,7 +41,6 @@ RoboReader was created by [Mikhail Viceman](https://github.com/vaivaikitay) in t
 
 [Mikhail Viceman](https://github.com/vaivaikitay)
 [@vaivaikitay](https://twitter.com/vaivaikitay)
-
 
 
 ## License
