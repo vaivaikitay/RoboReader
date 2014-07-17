@@ -348,7 +348,9 @@
             currentPage = [document.pageCount floatValue];
         //currentSliderPage = currentPage;
 
-        float sliderRatio = (pagebarOffset - pagebarSlider.minimumValue) / (pagebarSlider.maximumValue - pagebarSlider.minimumValue);
+        float sliderRatio = 0;
+        if (pagebarSlider.maximumValue != pagebarSlider.minimumValue)
+            sliderRatio = (pagebarOffset - pagebarSlider.minimumValue) / (pagebarSlider.maximumValue - pagebarSlider.minimumValue);
         if (sliderRatio < 0)
             sliderRatio = 0;
         if (sliderRatio > 1)
